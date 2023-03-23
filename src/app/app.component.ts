@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mPageService } from "@clinicaloffice/clinical-office-mpage";
+import { mPageService, PersonService } from "@clinicaloffice/clinical-office-mpage";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public mPage: mPageService
+    public mPage: mPageService,
+    public personService: PersonService
   ) { }
 
   ngOnInit(): void {
@@ -21,6 +22,8 @@ export class AppComponent implements OnInit {
       this.mPage.personId = params.personId ? parseInt(params.personId) : this.mPage.personId;
       this.mPage.encntrId = params.encounterId ? parseInt(params.encounterId) : this.mPage.encntrId;
       this.mPage.prsnlId = params.userId ? parseInt(params.userId) : this.mPage.prsnlId;
+
+      this.personService.load();
     });
 
     // Perform MPage Initialization
@@ -28,6 +31,8 @@ export class AppComponent implements OnInit {
       this.mPage.setMaxInstances(2, true, 'CHART');
 
       // Add your initialization code here - do not place outside setTimeout function
+
+      
     }, 0);
   }
 
