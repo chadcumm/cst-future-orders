@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
       this.mPage.setMaxInstances(2, true, 'CHART');
 
       // Add your initialization code here - do not place outside setTimeout function
-      this.personService.load();
-      this.encntrService.load();
+      //this.personService.load();
+      //this.encntrService.load();
     }, 0);
   }
 
