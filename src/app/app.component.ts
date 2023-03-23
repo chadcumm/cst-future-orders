@@ -22,8 +22,6 @@ export class AppComponent implements OnInit {
       this.mPage.personId = params.personId ? parseInt(params.personId) : this.mPage.personId;
       this.mPage.encntrId = params.encounterId ? parseInt(params.encounterId) : this.mPage.encntrId;
       this.mPage.prsnlId = params.userId ? parseInt(params.userId) : this.mPage.prsnlId;
-
-      this.personService.load();
     });
 
     // Perform MPage Initialization
@@ -31,7 +29,7 @@ export class AppComponent implements OnInit {
       this.mPage.setMaxInstances(2, true, 'CHART');
 
       // Add your initialization code here - do not place outside setTimeout function
-
+      this.personService.load();
       
     }, 0);
   }
