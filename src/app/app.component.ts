@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mPageService, PersonService } from "@clinicaloffice/clinical-office-mpage";
+import { mPageService, PersonService, EncounterService } from "@clinicaloffice/clinical-office-mpage";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,8 @@ export class AppComponent implements OnInit {
   constructor(
     public activatedRoute: ActivatedRoute,
     public mPage: mPageService,
-    public personService: PersonService
+    public personService: PersonService,
+    public encntrService: EncounterService
   ) { }
 
   ngOnInit(): void {
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
 
       // Add your initialization code here - do not place outside setTimeout function
       this.personService.load();
-      
+      this.encntrService.load();
     }, 0);
   }
 
