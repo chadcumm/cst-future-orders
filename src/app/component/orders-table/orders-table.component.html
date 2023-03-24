@@ -3,7 +3,10 @@
    class="ag-theme-alpine"
    [rowData]="futureOrderDS.futureOrders"
    [rowSelection]="'multiple'"
-   [animateRows]="true"
+   [animateRows]="false"
    [columnDefs]="columnDefs"
    [defaultColDef]="defaultColDef"
+   [groupDisplayType]="gDisplayType"
+   [autoGroupColumnDef]="agColDef"
+   [groupSelectsChildren]="true"
  ></ag-grid-angular>
