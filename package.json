@@ -24,6 +24,8 @@
     "@angular/platform-browser-dynamic": "^12.2.16",
     "@angular/router": "^12.2.16",
     "@clinicaloffice/clinical-office-mpage": "^3.6.23",
+    "ag-grid-angular": "^29.2.0",
+    "ag-grid-community": "^29.2.0",
     "classlist.js": "^1.1.20150312",
     "fast-sort": "^3.2.0",
     "iframe-resizer": "^4.3.6",

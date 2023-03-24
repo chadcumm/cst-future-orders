@@ -1,1 +1,9 @@
-<mpage-table [tableData]="futureOrderDS.futureOrders"></mpage-table>
+<ag-grid-angular
+   style="width: 100%; height: 100%"
+   class="ag-theme-alpine"
+   [rowData]="futureOrderDS.futureOrders"
+   [rowSelection]="'multiple'"
+   [animateRows]="true"
+   [columnDefs]="columnDefs"
+   [defaultColDef]="defaultColDef"
+ ></ag-grid-angular>
