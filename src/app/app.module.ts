@@ -12,6 +12,8 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import { OrdersTableComponent } from './component/orders-table/orders-table.component';
 import { AgGridModule } from 'ag-grid-angular';
 
+import 'ag-grid-enterprise';
+
 @NgModule({
   declarations: [
     AppComponent,
