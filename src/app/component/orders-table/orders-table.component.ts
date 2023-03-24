@@ -14,6 +14,7 @@ export class OrdersTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
   }
 
 }

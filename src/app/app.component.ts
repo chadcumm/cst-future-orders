@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mPageService, PersonService, EncounterService } from "@clinicaloffice/clinical-office-mpage";
+import { FutureorderService } from './service/futureorder.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [FutureorderService]
 })
 export class AppComponent implements OnInit {
 
@@ -13,7 +15,8 @@ export class AppComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public mPage: mPageService,
     public personService: PersonService,
-    public encntrService: EncounterService
+    public encntrService: EncounterService,
+    public futureOrdersService: FutureorderService
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +35,7 @@ export class AppComponent implements OnInit {
       // Add your initialization code here - do not place outside setTimeout function
       //this.personService.load();
       //this.encntrService.load();
+      this.futureOrdersService.loadFutureOrders();
     }, 0);
   }
 
