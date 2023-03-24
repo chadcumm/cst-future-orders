@@ -1,4 +1,4 @@
-# Clinical Office:MPage Edition Internet Explorer Template
+# Clinical Office:MPage Edition Internet Explorer CST Future Orders MPage
 
 This template has been designed to get you up and running with a new Clinical Office MPage
 with as little effort as possible.
