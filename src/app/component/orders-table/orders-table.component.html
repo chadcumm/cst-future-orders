@@ -1,1 +1,15 @@
-<mpage-table [tableData]="futureOrderDS.futureOrders"></mpage-table>
+
+<ejs-grid 
+    [dataSource]='futureOrderDS.futureOrders' 
+    [allowGrouping]='true' 
+    [groupSettings]='groupOptions' 
+    [allowFiltering]="true"
+    [filterSettings]='filterOptions'
+> 
+    <e-columns>
+        <e-column field='requestedStartDateVc' headerText='Est Collection Date' textAlign='Right' width=120></e-column>
+        <e-column field='orderMnemonic' headerText='Order' width=150></e-column>
+        <e-column field='orderingProvider' headerText='Provider' width=150></e-column>
+        <e-column field='orderDetails' headerText='Details' width=150></e-column>
+    </e-columns>
+</ejs-grid>
