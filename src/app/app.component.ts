@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mPageService, PersonService, EncounterService } from "@clinicaloffice/clinical-office-mpage";
 import { FutureorderService } from './service/futureorder.service';
@@ -7,7 +7,8 @@ import { FutureorderService } from './service/futureorder.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [FutureorderService]
+  providers: [FutureorderService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
 
