@@ -1,17 +1,1 @@
-<div style="margin-bottom: 5px;">
-  <button (click)="expandAll()">Expand All</button>
-  <button (click)="collapseAll()">Collapse All</button>
-</div>
-<ag-grid-angular
-   style="width: 100%; height: 100%"
-   class="ag-theme-alpine"
-   [rowData]="futureOrderDS.futureOrders"
-   [rowSelection]="'multiple'"
-   [animateRows]="false"
-   [columnDefs]="columnDefs"
-   [defaultColDef]="defaultColDef"
-   [groupDisplayType]="gDisplayType"
-   [autoGroupColumnDef]="agColDef"
-   [groupSelectsChildren]="true"
-   (gridReady)="onGridReady($event)"
- ></ag-grid-angular>
+<mpage-table [tableData]="futureOrderDS.futureOrders"></mpage-table>
