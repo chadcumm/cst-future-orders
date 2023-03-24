@@ -17,7 +17,7 @@ export class FutureorderService {
       customScript: {
         script: [
           {
-            name: 'bc_all_future_orders:group1',
+            name: '1bc_all_future_orders:group1',
             run: 'pre',
             id: 'futureorders'
           }
