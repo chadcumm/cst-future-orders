@@ -27,8 +27,8 @@ export class OrdersTableComponent implements OnInit {
     { 
         field: 'orderMnemonic',
         headerName: 'Order Mnemonic',
-        floatingFilter: true,
-        filter: 'agTextColumnFilter'
+        //floatingFilter: true,
+        //filter: 'agTextColumnFilter'
     },
     { 
         field: 'origOrderDateVc',
