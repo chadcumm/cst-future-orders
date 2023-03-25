@@ -10,6 +10,7 @@ import {AppComponent} from './app.component';
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { OrdersTableComponent } from './component/orders-table/orders-table.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { OrdersTableComponent } from './component/orders-table/orders-table.comp
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    NgxDatatableModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorHandlerService},

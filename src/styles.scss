@@ -2,3 +2,6 @@
 @use '~@angular/material' as mat;
 @import "theme";
 
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/material.scss';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
