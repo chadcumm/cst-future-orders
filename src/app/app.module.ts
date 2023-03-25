@@ -10,7 +10,9 @@ import {AppComponent} from './app.component';
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { OrdersTableComponent } from './component/orders-table/orders-table.component';
-import { GridModule,GroupService, FilterService} from '@syncfusion/ej2-angular-grids';
+import { GridModule,GroupService,FilterService} from '@syncfusion/ej2-angular-grids';
+import { TreeGridModule } from '@syncfusion/ej2-angular-treegrid';
+import { PageService, SortService } from '@syncfusion/ej2-angular-treegrid';
 //import { MultiSelectModule, CheckBoxSelectionService,DropDownListAllModule } from '@syncfusion/ej2-angular-dropdowns';
 //import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
 @NgModule({
@@ -27,11 +29,14 @@ import { GridModule,GroupService, FilterService} from '@syncfusion/ej2-angular-g
     FormsModule,
     ReactiveFormsModule,
     MatMomentDateModule,
-    GridModule
+    GridModule,
+    TreeGridModule
   ],
   providers: [
     GroupService,
     FilterService,
+    PageService,
+    SortService,
     {provide: ErrorHandler, useClass: ErrorHandlerService},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {
