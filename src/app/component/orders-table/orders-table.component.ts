@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { FutureorderService } from 'src/app/service/futureorder.service';
+import { ColumnMode,SortType,SelectionType } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-orders-table',
@@ -9,19 +10,43 @@ import { FutureorderService } from 'src/app/service/futureorder.service';
 })
 export class OrdersTableComponent implements OnInit {
 
-  rows = [
-    { name: 'Austin', gender: 'Male', company: 'Swimlane' },
-    { name: 'Dany', gender: 'Male', company: 'KFC' },
-    { name: 'Molly', gender: 'Female', company: 'Burger King' }
+  @ViewChild('ordersTable') table: any;
+
+  ColumnMode = ColumnMode;
+  SortType = SortType;
+  SelectionType = SelectionType;
+
+  funder = [];
+  calculated = [];
+  pending = [];
+  groups = [];
+  selected = [];
+
+  editing = {};
+  rows = [];
+
+  columns = [
+    {prop: 'requestedStartDateVc' }, 
+    { name: 'orderMnemonic' }, 
+    { name: 'orderingProvider' }
   ];
-  columns = [{ prop: 'name' }, { name: 'Gender' }, { name: 'Company' }];
   
   constructor(
     public futureOrderDS: FutureorderService
+
   ) { }
 
   ngOnInit(): void {
     
+  }
+
+  toggleExpandGroup(group: any) {
+    console.log('Toggled Expand Group!', group);
+    this.table.groupHeader.toggleExpandGroup(group);
+  }
+
+  onDetailToggle(event: any) {
+    console.log('Detail Toggled', event);
   }
 
 }

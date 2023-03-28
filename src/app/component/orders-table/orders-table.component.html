@@ -1,2 +1,36 @@
 <!--mpage-table [tableData]="futureOrderDS.futureOrders"></mpage-table-->
-<ngx-datatable [rows]="futureOrderDS.futureOrders"></ngx-datatable>
+<ngx-datatable 
+    #ordersTable
+    [rows]="futureOrderDS.futureOrders" 
+    [columns]="columns"
+    class="material expandable"
+    [groupRowsBy]="'requestedStartDateVc'"
+    [columnMode]="ColumnMode.force"
+    [scrollbarH]="true"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="40"
+    [limit]="20"
+    [groupExpansionDefault]="false"
+    [sortType]="SortType.multi"
+    
+>
+<!-- Group Header Template -->
+<ngx-datatable-group-header [rowHeight]="50" #myGroupHeader (toggle)="onDetailToggle($event)">
+    <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+      <div style="padding-left:5px;">
+        <a
+          href="#"
+          [class.datatable-icon-right]="!expanded"
+          [class.datatable-icon-down]="expanded"
+          title="Expand/Collapse Group"
+          (click)="toggleExpandGroup(group)"
+        >
+          <b>{{ group.value[0].requestedStartDateVc  }}</b>
+        </a>
+      </div>
+    </ng-template>
+  </ngx-datatable-group-header>
+  <ngx-datatable-column name="Collection Date" prop="requestedStartDateVc"></ngx-datatable-column>
+</ngx-datatable>
+{{ futureOrderDS.futureOrders | json}}
