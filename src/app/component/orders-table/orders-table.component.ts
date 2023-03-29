@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FutureorderService } from 'src/app/service/futureorder.service';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-orders-table',
@@ -11,6 +12,7 @@ import { FutureorderService } from 'src/app/service/futureorder.service';
 export class OrdersTableComponent implements OnInit {
   cols!: any[];
 
+  files!: TreeNode[];
   constructor(
     public futureOrderDS: FutureorderService
   ) { }
@@ -22,8 +24,10 @@ export class OrdersTableComponent implements OnInit {
       { field: 'orderingProvider', header: 'Provider' },
       { field: 'orderDetails', header: 'Details' }
     ];
+
   }
 
+  
   
 
 }
