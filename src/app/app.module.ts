@@ -10,6 +10,11 @@ import {AppComponent} from './app.component';
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { OrdersTableComponent } from './component/orders-table/orders-table.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { TreeTableModule} from 'primeng/treetable';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,11 @@ import { OrdersTableComponent } from './component/orders-table/orders-table.comp
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    TreeTableModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorHandlerService},

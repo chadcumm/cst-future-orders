@@ -43,6 +43,26 @@ export class FutureorderService {
   }
 
 
+  public get futureOrders2(): any[]  {
+    //return this.futureOrderService.get('futureorders').orderList
+    return(this.orderJSON2)
+  }
+
+public orderJSON2: any= {
+  "data": [
+  {
+      "label": "04-APR-2023",
+      "data": "2023-04-04",
+      "children:": [
+        {
+          "label": "04-APR-2023",
+          "data": "2023-04-04",
+
+      }
+      ]
+  }
+  ]
+}
   public orderJSON = [
     {
       "orderCnt": 28,

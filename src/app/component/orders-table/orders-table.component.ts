@@ -7,14 +7,23 @@ import { FutureorderService } from 'src/app/service/futureorder.service';
   styleUrls: ['./orders-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class OrdersTableComponent implements OnInit {
+  cols!: any[];
 
   constructor(
     public futureOrderDS: FutureorderService
   ) { }
 
   ngOnInit(): void {
-    
+    this.cols = [
+      { field: 'requestedStartDateVc', header: 'Est Collection Date' },
+      { field: 'orderMnemonic', header: 'Order' },
+      { field: 'orderingProvider', header: 'Provider' },
+      { field: 'orderDetails', header: 'Details' }
+    ];
   }
+
+  
 
 }

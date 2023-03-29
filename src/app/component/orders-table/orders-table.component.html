@@ -1,1 +1,107 @@
-<mpage-table [tableData]="futureOrderDS.futureOrders"></mpage-table>
+<p-treeTable
+    [value]="futureOrderDS.futureOrders2"
+    [columns]="cols"
+>
+<ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns">
+        {{ col.header }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template
+  pTemplate="body"
+  let-rowNode
+  let-rowData="rowData"
+  let-columns="columns"
+>
+  <tr [ttRow]="rowNode" [ttRow]="rowNode" [ttSelectableRow]="rowNode">
+    <td>{{rowNode}}</td>
+    <td *ngFor="let col of columns; let i = index">
+        
+      <p-treeTableToggler
+        [rowNode]="rowNode"
+        *ngIf="i == 0"
+      ></p-treeTableToggler>
+      <p-treeTableCheckbox
+        [value]="rowNode"
+        *ngIf="i == 0"
+      ></p-treeTableCheckbox>
+      {{ rowData[col.field] }}
+    </td>
+  </tr>
+</ng-template>
+</p-treeTable>
+{{ futureOrderDS.futureOrders2 | json }}
+<p-table 
+    [value]="futureOrderDS.futureOrders"
+    [resizableColumns]="true"
+    rowGroupMode="subheader" 
+    dataKey="orderId"
+    groupRowsBy="requestedStartDateVc"
+    sortMode="multiple"
+    [scrollable]="true"
+    scrollHeight="800px"
+    styleClass="p-datatable-customers p-datatable-gridlines"
+    [globalFilterFields]="['Order','order.orderMnemonic']"
+    
+    selectionMode=""
+    >
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <span class="p-input-icon-left p-ml-auto">
+                <i class="pi pi-search"></i>
+                <input class="p-inputtext p-component" pInputText type="text" placeholder="Search Name" />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            
+            <th [pSortableColumn]="'requestedStartDateVc'">
+                Est Collection Date Time
+                <p-sortIcon [field]="'requestedStartDate'"></p-sortIcon>
+            </th>
+            <th [pSortableColumn]="'orderMnemonic'">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Order 
+                    <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                    <p-sortIcon [field]="'orderMnemonic'"></p-sortIcon>
+                </div>
+            </th>
+            <th>Provder</th>
+            <th>Details</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="groupheader" let-orderGroup let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr [pSelectableRow]="orderGroup" [pSelectableRowIndex]="rowIndex">
+            
+            <td colspan="5">
+                <button type="button" pButton pRipple 
+                [pRowToggler]="orderGroup" 
+                class="p-button-text p-button-rounded p-button-plain p-mr-2" 
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <span class="p-text-bold p-ml-2">{{orderGroup.requestedStartDateVc}}</span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="rowexpansion" let-order>
+        <tr [pSelectableRow]="order">
+            <td>
+                <p-tableCheckbox
+                  [value]="order"
+                  [pSelectableRow]="order"
+                ></p-tableCheckbox>
+              </td>
+            <td>{{order.requestedStartDateVc}}</td>
+            <td>{{order.orderMnemonic}}</td>
+            <td>{{order.orderingProvider}}</td>
+            <td>{{order.orderDetails}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+<!--
+{{ futureOrderDS.futureOrders | json }}
+-->
