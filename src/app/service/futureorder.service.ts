@@ -21,7 +21,7 @@ export class FutureorderService {
       customScript: {
         script: [
           {
-            name: 'bc_all_future_orders:group1',
+            name: '2bc_all_future_orders:group1',
             run: 'pre',
             id: 'futureorders'
           }
@@ -32,14 +32,14 @@ export class FutureorderService {
 
   //Returns Orders Data
   public get futureOrders(): any[]  {
-    //return this.futureOrderService.get('futureorders').orderList
-    return(this.orderJSON[0].orderList)
+    return this.futureOrderService.get('futureorders').orderList
+    //return(this.orderJSON[0].orderList)
   }
 
   // Determine if Future Ordres have been loaded
   public get futureOrdersLoaded(): boolean {
-    //return this.futureOrderService.isLoaded('futureorders');
-    return true;
+    return this.futureOrderService.isLoaded('futureorders');
+    //return true;
   }
 
 

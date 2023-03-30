@@ -15,7 +15,10 @@ import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { TreeTableModule} from 'primeng/treetable';
-
+import { TooltipModule } from 'primeng/tooltip';
+import {InputTextModule} from 'primeng/inputtext';
+import {ToolbarModule} from 'primeng/toolbar'
+import {CheckboxModule} from 'primeng/checkbox'
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +36,11 @@ import { TreeTableModule} from 'primeng/treetable';
     TableModule,
     ButtonModule,
     DropdownModule,
-    TreeTableModule
+    TreeTableModule,
+    TooltipModule,
+    InputTextModule,
+    ToolbarModule,
+    CheckboxModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorHandlerService},
