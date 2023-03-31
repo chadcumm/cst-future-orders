@@ -1,4 +1,8 @@
 <p-toolbar>
+  <div class="p-toolbar-group-left">
+    <button pButton type="button" (click)="onExpandOneLevel()" class="p-button-outlined">Expand</button>
+    <button pButton type="button" (click)="onCollapseOneLevel()" class="p-button-outlined">Collapse</button>
+  </div>
 <p-dropdown [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')" ></p-dropdown>
@@ -13,30 +17,30 @@
     <i class="pi pi-search"></i>
     <input pInputText type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
   </span>
-  
+
   <p-checkbox 
   [binary]="true" 
   falseValue="" 
   trueValue="Blood" 
   (onChange)="tt.filter($event.checked, 'specimenType', 'equals')"
   label="Exclude orders uncommonly activated by Lab"></p-checkbox>
-  
 </p-toolbar>
 <p-treeTable 
 #tt
-    [value]="futureOrderDS.futureOrders"
+    [value]="files"
     [columns]="cols"
     [reorderableColumns]="true"
     [scrollable]="true"
     [filterDelay]="0" [globalFilterFields]="['orderMnemonic']"
-    [style]="{width:'100%'}"
+    [style]="{width:'1440px'}"
+    (onFilter)="this.onExpandOneLevel()"
 > 
 
 
 <ng-template pTemplate="header" let-columns>
  
     <tr>
-      <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
+      <th *ngFor="let col of columns" [ttSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
         {{ col.header }}
         <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
       </th>
@@ -57,6 +61,7 @@
     
     <td 
       [ngClass]="{'kb-cell': rowData.hiddenData.dueStatusFlag === 1 }"
+      [ngStyle]="{'width': col.width}"
       *ngFor="let col of columns; let i = index"
      
       >
