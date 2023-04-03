@@ -9,6 +9,7 @@ export class FutureorderService {
 
   public FutureOrdersLoading: boolean = false;
   
+
   constructor(
       private futureOrderService: CustomService
       
@@ -30,6 +31,20 @@ export class FutureorderService {
     }, undefined, (() => { this.FutureOrdersLoading = false }));
   }
 
+  //Returns Provider Data
+  public get providerList(): any[]  {
+    //console.log(this.futureOrderService.get('futureorders'))
+    return this.futureOrderService.get('futureorders').providerList
+    //return(this.orderJSON[0].orderList)
+  }
+
+  //Returns Ordering Location Data
+  public get orderingList(): any[]  {
+      //console.log(this.futureOrderService.get('futureorders'))
+      return this.futureOrderService.get('futureorders').ordLocationList
+      //return(this.orderJSON[0].orderList)
+  }
+
   //Returns Orders Data
   public get futureOrders(): any[]  {
     //console.log(this.futureOrderService.get('futureorders'))
@@ -41,6 +56,13 @@ export class FutureorderService {
   public get futureOrdersLoaded(): boolean {
     return this.futureOrderService.isLoaded('futureorders');
     //return true;
+  }
+
+  //Returns Orders Data
+  public get orderCounts(): any[]  {
+    //console.log(this.futureOrderService.get('futureorders'))
+    return this.futureOrderService.get('futureorders').counts
+    //return(this.orderJSON[0].orderList)
   }
 
 

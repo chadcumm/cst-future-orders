@@ -1,30 +1,43 @@
+
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <button pButton type="button" (click)="onExpandOneLevel()" class="p-button-outlined">Expand</button>
     <button pButton type="button" (click)="onCollapseOneLevel()" class="p-button-outlined">Collapse</button>
   </div>
+  <div class="p-toolbar-group-right">
 <p-dropdown [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '130px'}"
   (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')" ></p-dropdown>
 
-  <input pInputText type="text" placeholder="Provider" class="p-column-filter"
-  (input)="tt.filter($any($event.target).value, 'orderingProvider', 'startsWith')"> 
+<p-dropdown [options]="futureOrderDS.providerList" [(ngModel)]="selectedProvider" placeholder="Provider" optionLabel="label"
+	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '130px'}"
+  (onChange)="tt.filter($event.value.value, 'orderingProvider', 'equals')" ></p-dropdown>
 
-  <input pInputText type="text" placeholder="Ordering Location" class="p-column-filter"
-  (input)="tt.filter($any($event.target).value, 'orderingLocation', 'startsWith')"> 
+  <p-dropdown [options]="futureOrderDS.orderingList" [(ngModel)]="selectedLocation" placeholder="Ordering Location" optionLabel="label"
+	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '130px'}"
+  (onChange)="tt.filter($event.value.value, 'orderingLocation', 'equals')" ></p-dropdown>
 
   <span class="p-input-icon-left">
     <i class="pi pi-search"></i>
     <input pInputText type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
   </span>
-
+<span [ngStyle]="{width: '130px'}">
   <p-checkbox 
   [binary]="true" 
   falseValue="" 
   trueValue="Blood" 
   (onChange)="tt.filter($event.checked, 'specimenType', 'equals')"
   label="Exclude orders uncommonly activated by Lab"></p-checkbox>
+</span>
+</div>
 </p-toolbar>
+
+<p-tabView>
+  <p-tabPanel header="Labs ({{this.orderCounts.lab}})">
+
 <p-treeTable 
 #tt
     [value]="files"
@@ -32,8 +45,10 @@
     [reorderableColumns]="true"
     [scrollable]="true"
     [filterDelay]="0" [globalFilterFields]="['orderMnemonic']"
-    [style]="{width:'1440px'}"
+    [style]="{width:'100%'}"
     (onFilter)="this.onExpandOneLevel()"
+    [metaKeySelection]="true"
+    styleClass="tdLessPadding"
 > 
 
 
@@ -56,28 +71,37 @@
     [ttRow]="rowNode" 
     [ttSelectableRow]="rowNode"
     [ngClass]="{'kb-row': rowData.hiddenData.dueStatusFlag === 1 }"
-    pTooltip="Info Here"  tooltipPosition="left"
+    pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"
+
     >
-    
+    <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"-->
     <td 
       [ngClass]="{'kb-cell': rowData.hiddenData.dueStatusFlag === 1 }"
       [ngStyle]="{'width': col.width}"
       *ngFor="let col of columns; let i = index"
-     
-      >
+      > 
+      <div *ngIf="i == 0 && rowData.orderId === 0">{{rowData.requestedStartDateVc}}</div>
       <p-treeTableToggler
         [rowNode]="rowNode"
         *ngIf="i == 0"
-      >
+      > 
     </p-treeTableToggler>
       <p-treeTableCheckbox
         [value]="rowNode"
         *ngIf="i == 0"
       ></p-treeTableCheckbox>
-      
+      <span [ngStyle]="{width: '130px'}">
+        <i *ngIf="i == 0 && rowData.powerplan.ind === 1" class="pi pi-book">
+
+        </i>
+        <i *ngIf="i == 0 && rowData.note.ind === 1" class="pi pi-exclamation-circle">
+
+        </i>
+      </span>
       {{ rowData[col.field] }}
-      
+     
     </td>
+  
   </tr>
 </ng-template>
 <ng-template pTemplate="emptymessage">
@@ -86,3 +110,17 @@
   </tr>
 </ng-template>
 </p-treeTable>
+</p-tabPanel>
+<p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}})">
+</p-tabPanel>
+<p-tabPanel header="All ({{this.orderCounts.all}})">
+</p-tabPanel>
+
+</p-tabView>
+<p-accordion>
+  <p-accordionTab header="Legend">
+    <i class="pi pi-book"> PowerPlan Indicator</i>
+    <br>
+    <i class="pi pi-exclamation-circle"> Lab Requisition Note Indicator</i>
+  </p-accordionTab>
+</p-accordion>

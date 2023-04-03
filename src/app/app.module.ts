@@ -19,6 +19,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import {InputTextModule} from 'primeng/inputtext';
 import {ToolbarModule} from 'primeng/toolbar'
 import {CheckboxModule} from 'primeng/checkbox'
+import {AccordionModule} from 'primeng/accordion'
+import {TabViewModule} from 'primeng/tabview'
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +42,9 @@ import {CheckboxModule} from 'primeng/checkbox'
     TooltipModule,
     InputTextModule,
     ToolbarModule,
-    CheckboxModule
+    CheckboxModule,
+    AccordionModule,
+    TabViewModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorHandlerService},

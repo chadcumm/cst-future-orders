@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FutureorderService } from 'src/app/service/futureorder.service';
-import { TreeNode } from 'primeng/api';
+import { TreeNode,PrimeIcons } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
 
 interface Specimens {
@@ -20,8 +20,12 @@ export class OrdersTableComponent implements OnInit {
   level: number = 0;
   specimens: Specimens[] = [];
   expanded: boolean = false;
+  
+  orderCounts!: any
 
   selectedSpecimen!: Specimens
+  selectedProvider!: any
+  selectedLocation!: any
 
   files!: TreeNode[];
   constructor(
@@ -35,24 +39,25 @@ export class OrdersTableComponent implements OnInit {
     ]
 
     this.cols = [
-      { field: 'requestedStartDateVc', header: 'Est Collection Date', width: '150px' },
-      { field: 'orderMnemonic', header: 'Order', width: '100px' },
-      { field: 'orderingProvider', header: 'Provider', width: '100px' },
-      { field: 'orderingLocation', header: 'Ordering Location' , width: '150px'},
-      { field: 'origOrderDateVc', header: 'Order Date', width: '100px' },
-      { field: 'orderDetails', header: 'Details', width: '500px' },
+      
+      { field: 'orderMnemonic', header: 'Order' },
+      { field: 'orderingProvider', header: 'Provider', width: '150px' },
+      { field: 'orderingLocation', header: 'Ordering Location' , width: '170px'},
+      { field: 'origOrderDateVc', header: 'Order Date', width: '170px' },
+      { field: 'orderDetails', header: 'Details' },
     ];
   }
 
   ngOnInit(): void {
     
     this.files = this.futureOrderDS.futureOrders
+    this.orderCounts = this.futureOrderDS.orderCounts
     console.log(this.files)
   }
 
   
   logChange($event:any) :void {
-    console.log($event.value.value) 
+    console.log($event.value.name) 
   } 
 
   toggleVisibility(isChecked: boolean)
