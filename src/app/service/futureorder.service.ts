@@ -8,7 +8,8 @@ import * as ordersjsonData from '../../assets/futureorders.json';
 export class FutureorderService {
 
   public FutureOrdersLoading: boolean = false;
-  
+  public LastRefesh: string = "";
+  public refresh = false;
 
   constructor(
       private futureOrderService: CustomService
@@ -17,7 +18,8 @@ export class FutureorderService {
 
   public loadFutureOrders(): void{
     this.FutureOrdersLoading = true;
-   
+
+
     this.futureOrderService.load({
       customScript: {
         script: [
@@ -28,7 +30,11 @@ export class FutureorderService {
           }
         ]
       }
-    }, undefined, (() => { this.FutureOrdersLoading = false }));
+    }, undefined, (() => { 
+      this.FutureOrdersLoading = false 
+      this.LastRefesh = this.futureOrderService.get('futureorders').lastrefesh
+      this.refresh = true;
+    }));
   }
 
   //Returns Provider Data

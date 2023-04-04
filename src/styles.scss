@@ -17,22 +17,13 @@ html {
     }
   }
 
-  .couponcode:hover .coupontooltip {
-    display: block;
-}
+  ::ng-deep {
+    .p-tooltip {
+        max-width: fit-content;
+     }
+} 
 
+.cmctooltip {
 
-.coupontooltip {
-    display: none;
-    background: #C8C8C8;
-    margin-left: 28px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1000;
-    width:200px;
-    height:100px;
-}
-
-.couponcode {
-    margin:100px;
+  max-width: fit-content;
 }

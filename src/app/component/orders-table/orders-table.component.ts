@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { FutureorderService } from 'src/app/service/futureorder.service';
-import { TreeNode,PrimeIcons } from 'primeng/api';
+import { TreeNode,PrimeIcons,FilterService } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
 
 interface Specimens {
@@ -15,10 +15,13 @@ interface Specimens {
   })
 
 
-export class OrdersTableComponent implements OnInit {
+export class OrdersTableComponent implements OnInit, DoCheck {
   cols!: any[];
   level: number = 0;
   specimens: Specimens[] = [];
+  loobackOptions: Specimens[] = [];
+  lookforwardOptions: Specimens[] = [];
+
   expanded: boolean = false;
   
   orderCounts!: any
@@ -26,16 +29,40 @@ export class OrdersTableComponent implements OnInit {
   selectedSpecimen!: Specimens
   selectedProvider!: any
   selectedLocation!: any
+  selectedLookback!: Specimens
+  selectedLookforward!: Specimens
+
+  loading: boolean = false;
 
   files!: TreeNode[];
   constructor(
-    public futureOrderDS: FutureorderService
+    public futureOrderDS: FutureorderService,
+    public cdr: ChangeDetectorRef,
+    public filterService: FilterService
   ) { 
 
     this.specimens = [
       {label: "Blood", value:"Blood"},
       {label: "Non-Blood", value:"nonblood"},
       {label: "All", value: ""}
+    ]
+
+    this.loobackOptions = [
+      {label: "1 Month", value: "1"},
+      {label: "2 Months", value: "2"},
+      {label: "3 Months", value: "3"},
+      {label: "4 Months", value: "4"},
+      {label: "5 Months", value: "5"},
+      {label: "6+ Months", value: ""},
+    ]
+
+    this.lookforwardOptions = [
+      {label: "1 Month", value: "1"},
+      {label: "2 Months", value: "2"},
+      {label: "3 Months", value: "3"},
+      {label: "4 Months", value: "4"},
+      {label: "5 Months", value: "5"},
+      {label: "6+ Months", value: ""},
     ]
 
     this.cols = [
@@ -48,13 +75,42 @@ export class OrdersTableComponent implements OnInit {
     ];
   }
 
+  ngDoCheck(): void {  
+      if (this.futureOrderDS.refresh === true) {
+      setTimeout(() => {
+        this.futureOrderDS.refresh = false;
+      });
+      this.cdr.detectChanges();
+    }
+     
+    }
+
   ngOnInit(): void {
     
     this.files = this.futureOrderDS.futureOrders
     this.orderCounts = this.futureOrderDS.orderCounts
+    this.loading = false;
     console.log(this.files)
   }
 
+
+  tableRefresh(): void{
+    this.loading = true;
+    //this.files = [];
+    this.futureOrderDS.refresh = true
+    this.futureOrderDS.loadFutureOrders()
+    if (this.futureOrderDS.refresh === true) {
+      setTimeout(() => {
+        this.futureOrderDS.refresh = false;
+        this.files = [...this.futureOrderDS.futureOrders];
+        console.log(this.futureOrderDS.LastRefesh)
+        console.log(this.files)
+        this.cdr.detectChanges();
+        this.loading = false;
+      }, 500);
+    }
+    
+  }
   
   logChange($event:any) :void {
     console.log($event.value.name) 

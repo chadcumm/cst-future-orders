@@ -21,6 +21,7 @@ import {ToolbarModule} from 'primeng/toolbar'
 import {CheckboxModule} from 'primeng/checkbox'
 import {AccordionModule} from 'primeng/accordion'
 import {TabViewModule} from 'primeng/tabview'
+
 @NgModule({
   declarations: [
     AppComponent,

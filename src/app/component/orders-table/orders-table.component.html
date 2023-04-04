@@ -1,30 +1,56 @@
 
 <p-toolbar>
   <div class="p-toolbar-group-left">
+    <!--
     <button pButton type="button" (click)="onExpandOneLevel()" class="p-button-outlined">Expand</button>
     <button pButton type="button" (click)="onCollapseOneLevel()" class="p-button-outlined">Collapse</button>
+  -->
   </div>
   <div class="p-toolbar-group-right">
+
+  <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" placeholder="Look Back" optionLabel="label"
+	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '130px'}"
+  (onChange)="tt.filter($event.value.value, '', 'equals')" ></p-dropdown>
+  
+  <span [ngStyle]="{width: '10px'}"></span>
+
+  <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward" placeholder="Look Forward" optionLabel="label"
+	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '130px'}"
+  (onChange)="tt.filter($event.value.value, '', 'equals')" ></p-dropdown>
+  
+  <span [ngStyle]="{width: '10px'}"></span>
+
 <p-dropdown [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '130px'}"
   (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')" ></p-dropdown>
+  
+  <span [ngStyle]="{width: '10px'}"></span>
 
 <p-dropdown [options]="futureOrderDS.providerList" [(ngModel)]="selectedProvider" placeholder="Provider" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '130px'}"
   (onChange)="tt.filter($event.value.value, 'orderingProvider', 'equals')" ></p-dropdown>
 
+  <span [ngStyle]="{width: '10px'}"></span>
+
   <p-dropdown [options]="futureOrderDS.orderingList" [(ngModel)]="selectedLocation" placeholder="Ordering Location" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
-  [style]="{width: '130px'}"
+  [style]="{width: '150px'}"
   (onChange)="tt.filter($event.value.value, 'orderingLocation', 'equals')" ></p-dropdown>
+
+  <span [ngStyle]="{width: '10px'}"></span>
 
   <span class="p-input-icon-left">
     <i class="pi pi-search"></i>
     <input pInputText type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
   </span>
-<span [ngStyle]="{width: '130px'}">
+  
+  <span [ngStyle]="{width: '10px'}"></span>
+
+<span [ngStyle]="{width: '175px'}">
   <p-checkbox 
   [binary]="true" 
   falseValue="" 
@@ -40,6 +66,7 @@
 
 <p-treeTable 
 #tt
+    
     [value]="files"
     [columns]="cols"
     [reorderableColumns]="true"
@@ -49,6 +76,7 @@
     (onFilter)="this.onExpandOneLevel()"
     [metaKeySelection]="true"
     styleClass="tdLessPadding"
+    [loading]="this.loading"
 > 
 
 
@@ -71,7 +99,7 @@
     [ttRow]="rowNode" 
     [ttSelectableRow]="rowNode"
     [ngClass]="{'kb-row': rowData.hiddenData.dueStatusFlag === 1 }"
-    pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"
+    pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="top" [escape]="false"
 
     >
     <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"-->
@@ -79,6 +107,7 @@
       [ngClass]="{'kb-cell': rowData.hiddenData.dueStatusFlag === 1 }"
       [ngStyle]="{'width': col.width}"
       *ngFor="let col of columns; let i = index"
+      
       > 
       <div *ngIf="i == 0 && rowData.orderId === 0">{{rowData.requestedStartDateVc}}</div>
       <p-treeTableToggler
@@ -118,6 +147,18 @@
 
 </p-tabView>
 <p-accordion>
+<p-toolbar>
+  <div class="p-toolbar-group-left"></div>
+  <div class="p-toolbar-group-right">
+    Last Refresh: {{futureOrderDS.LastRefesh}}
+    <span [ngStyle]="{width: '10px'}"></span>
+  
+    <p-button label="Refresh" icon="pi pi-refresh" (click)="tableRefresh();"></p-button>
+    <span [ngStyle]="{width: '10px'}"></span>
+    <p-button type="button" (click)="logChange($event)">Activate</p-button>
+
+  </div>
+</p-toolbar>
   <p-accordionTab header="Legend">
     <i class="pi pi-book"> PowerPlan Indicator</i>
     <br>
