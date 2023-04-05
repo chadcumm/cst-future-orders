@@ -8,38 +8,44 @@
   </div>
   <div class="p-toolbar-group-right">
 
-  <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" placeholder="Look Back" optionLabel="label"
+  <input type="text" pInputText [(ngModel)]="lookbackNumber" [style]="{width: '20px'}"/>
+  <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
-  [style]="{width: '130px'}"
-  (onChange)="tt.filter($event.value.value, '', 'equals')" ></p-dropdown>
+  [style]="{width: '100px'}"
+  (onChange)="tt.filter($event.value.value, 'lookbackMonth', 'lte')" ></p-dropdown>
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-  <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward" placeholder="Look Forward" optionLabel="label"
+  <input type="text" pInputText [(ngModel)]="lookforwardNumber" [style]="{width: '20px'}"/>
+
+  <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward"  optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
-  [style]="{width: '130px'}"
-  (onChange)="tt.filter($event.value.value, '', 'equals')" ></p-dropdown>
+  [style]="{width: '100px'}"
+  (onChange)="tt.filter($event.value.value, 'lookforwardMonth', 'lte')" ></p-dropdown>
   
   <span [ngStyle]="{width: '10px'}"></span>
 
 <p-dropdown [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
-	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
-  [style]="{width: '130px'}"
-  (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')" ></p-dropdown>
+	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '170px'}"
+  (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')"
+  (onClear)="tt.filter('', 'specimenType', 'notEquals')" ></p-dropdown>
   
   <span [ngStyle]="{width: '10px'}"></span>
 
 <p-dropdown [options]="futureOrderDS.providerList" [(ngModel)]="selectedProvider" placeholder="Provider" optionLabel="label"
-	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '130px'}"
-  (onChange)="tt.filter($event.value.value, 'orderingProvider', 'equals')" ></p-dropdown>
+  (onChange)="tt.filter($event.value.value, 'orderingProvider', 'equals')"
+  (onClear)="tt.filter('', 'orderingProvider', 'notEquals')" ></p-dropdown>
 
   <span [ngStyle]="{width: '10px'}"></span>
 
   <p-dropdown [options]="futureOrderDS.orderingList" [(ngModel)]="selectedLocation" placeholder="Ordering Location" optionLabel="label"
-	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
-  [style]="{width: '150px'}"
-  (onChange)="tt.filter($event.value.value, 'orderingLocation', 'equals')" ></p-dropdown>
+	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
+  [style]="{width: '170px'}"
+  (onChange)="tt.filter($event.value.value, 'orderingLocation', 'equals')"
+  (onClear)="tt.filter('', 'orderingLocation', 'notEquals')" ></p-dropdown>
 
   <span [ngStyle]="{width: '10px'}"></span>
 
@@ -50,14 +56,13 @@
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-<span [ngStyle]="{width: '175px'}">
+<!--span [ngStyle]="{width: '175px'}"-->
   <p-checkbox 
   [binary]="true" 
-  falseValue="" 
-  trueValue="Blood" 
-  (onChange)="tt.filter($event.checked, 'specimenType', 'equals')"
+  [(ngModel)]="typicalLab" 
+  (onChange)="tt.filter($event.checked, 'typicalLab', 'contains')"
   label="Exclude orders uncommonly activated by Lab"></p-checkbox>
-</span>
+<!--/span-->
 </div>
 </p-toolbar>
 
@@ -73,7 +78,7 @@
     [scrollable]="true"
     [filterDelay]="0" [globalFilterFields]="['orderMnemonic']"
     [style]="{width:'100%'}"
-    (onFilter)="this.onExpandOneLevel()"
+    
     [metaKeySelection]="true"
     styleClass="tdLessPadding"
     [loading]="this.loading"
@@ -123,10 +128,10 @@
         <i *ngIf="i == 0 && rowData.powerplan.ind === 1" class="pi pi-book">
 
         </i>
-        <i *ngIf="i == 0 && rowData.note.ind === 1" class="pi pi-exclamation-circle">
-
-        </i>
       </span>
+      <i *ngIf="i == 4 && rowData.note.ind === 1" class="pi pi-exclamation-circle">
+
+      </i>
       {{ rowData[col.field] }}
      
     </td>
@@ -143,12 +148,21 @@
 <p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}})">
 </p-tabPanel>
 <p-tabPanel header="All ({{this.orderCounts.all}})">
+  
 </p-tabPanel>
 
 </p-tabView>
-<p-accordion>
 <p-toolbar>
-  <div class="p-toolbar-group-left"></div>
+  <div class="p-toolbar-group-left">
+    
+<p-accordion>
+  <p-accordionTab header="Legend">
+    <i class="pi pi-book"> PowerPlan Indicator</i>
+    <br>
+    <i class="pi pi-exclamation-circle"> Lab Requisition Note Indicator</i>
+  </p-accordionTab>
+</p-accordion>
+  </div>
   <div class="p-toolbar-group-right">
     Last Refresh: {{futureOrderDS.LastRefesh}}
     <span [ngStyle]="{width: '10px'}"></span>
@@ -159,9 +173,4 @@
 
   </div>
 </p-toolbar>
-  <p-accordionTab header="Legend">
-    <i class="pi pi-book"> PowerPlan Indicator</i>
-    <br>
-    <i class="pi pi-exclamation-circle"> Lab Requisition Note Indicator</i>
-  </p-accordionTab>
-</p-accordion>
+ 

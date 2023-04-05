@@ -1,11 +1,24 @@
-import { ChangeDetectionStrategy, Component, OnInit, DoCheck, ChangeDetectorRef } from '@angular/core';
+import {  ChangeDetectionStrategy, 
+          Component, 
+          OnInit, 
+          DoCheck, 
+          ChangeDetectorRef, 
+          ViewChild,
+          AfterViewInit
+         } from '@angular/core';
 import { FutureorderService } from 'src/app/service/futureorder.service';
 import { TreeNode,PrimeIcons,FilterService } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
+import { TreeTable } from 'primeng/treetable';
 
 interface Specimens {
   label: string,
   value: string 
+}
+
+interface LookOptions {
+  label: string,
+  value: number 
 }
 
 @Component({
@@ -15,12 +28,19 @@ interface Specimens {
   })
 
 
-export class OrdersTableComponent implements OnInit, DoCheck {
+export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
+
+  @ViewChild("tt") treetable!: TreeTable;
+
   cols!: any[];
   level: number = 0;
   specimens: Specimens[] = [];
-  loobackOptions: Specimens[] = [];
-  lookforwardOptions: Specimens[] = [];
+  loobackOptions: LookOptions[] = [];
+  lookbackNumber: number = 1;
+
+  lookforwardOptions: LookOptions[] = [];
+  lookforwardNumber: number = 1;
+
 
   expanded: boolean = false;
   
@@ -29,8 +49,10 @@ export class OrdersTableComponent implements OnInit, DoCheck {
   selectedSpecimen!: Specimens
   selectedProvider!: any
   selectedLocation!: any
-  selectedLookback!: Specimens
-  selectedLookforward!: Specimens
+  selectedLookback!: LookOptions
+  selectedLookforward!: LookOptions
+
+  typicalLab: boolean = true;
 
   loading: boolean = false;
 
@@ -42,27 +64,20 @@ export class OrdersTableComponent implements OnInit, DoCheck {
   ) { 
 
     this.specimens = [
-      {label: "Blood", value:"Blood"},
-      {label: "Non-Blood", value:"nonblood"},
-      {label: "All", value: ""}
+      {label: "Blood", value:"blood"},
+      {label: "Non-Blood", value:"nonblood"}
     ]
 
     this.loobackOptions = [
-      {label: "1 Month", value: "1"},
-      {label: "2 Months", value: "2"},
-      {label: "3 Months", value: "3"},
-      {label: "4 Months", value: "4"},
-      {label: "5 Months", value: "5"},
-      {label: "6+ Months", value: ""},
+      {label: "Months", value: 1},
+      {label: "Weeks", value: 2},
+      {label: "Days", value: 3}
     ]
 
     this.lookforwardOptions = [
-      {label: "1 Month", value: "1"},
-      {label: "2 Months", value: "2"},
-      {label: "3 Months", value: "3"},
-      {label: "4 Months", value: "4"},
-      {label: "5 Months", value: "5"},
-      {label: "6+ Months", value: ""},
+      {label: "Months", value: 1},
+      {label: "Weeks", value: 2},
+      {label: "Days", value: 3}
     ]
 
     this.cols = [
@@ -71,8 +86,12 @@ export class OrdersTableComponent implements OnInit, DoCheck {
       { field: 'orderingProvider', header: 'Provider', width: '150px' },
       { field: 'orderingLocation', header: 'Ordering Location' , width: '170px'},
       { field: 'origOrderDateVc', header: 'Order Date', width: '170px' },
+      { field: 'note.marker', header: 'Lab Req Note', width: '100px' },
       { field: 'orderDetails', header: 'Details' },
     ];
+  }
+  ngAfterViewInit(): void {
+    console.log("test")
   }
 
   ngDoCheck(): void {  
@@ -87,9 +106,14 @@ export class OrdersTableComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     
+    
     this.files = this.futureOrderDS.futureOrders
     this.orderCounts = this.futureOrderDS.orderCounts
     this.loading = false;
+    
+    //this.selectedLookforward.label = "Months";
+    //this.selectedLookback.label = "Months";
+    
     console.log(this.files)
   }
 
@@ -113,7 +137,8 @@ export class OrdersTableComponent implements OnInit, DoCheck {
   }
   
   logChange($event:any) :void {
-    console.log($event.value.name) 
+    console.log($event) 
+    console.log("logChange")
   } 
 
   toggleVisibility(isChecked: boolean)
