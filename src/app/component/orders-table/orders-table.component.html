@@ -104,7 +104,7 @@
     [ttRow]="rowNode" 
     [ttSelectableRow]="rowNode"
     [ngClass]="{'kb-row': rowData.hiddenData.dueStatusFlag === 1 }"
-    pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="top" [escape]="false"
+    
 
     >
     <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"-->
@@ -124,13 +124,20 @@
         [value]="rowNode"
         *ngIf="i == 0"
       ></p-treeTableCheckbox>
-      <span [ngStyle]="{width: '130px'}">
-        <i *ngIf="i == 0 && rowData.powerplan.ind === 1" class="pi pi-book">
-
-        </i>
+      <span [ngStyle]="{width: '130px'}"
+        pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="top" [escape]="false"
+      >
+        <img *ngIf="i == 0 && rowData.powerplan.ind === 1"
+          class="icon"
+          src="assets/powerplan.png"
+        />
+        <img *ngIf="i == 0 && rowData.orderCommentInd === 1"
+          class="icon"
+          src="assets/comment.gif"
+        />
       </span>
-      <i *ngIf="i == 4 && rowData.note.ind === 1" class="pi pi-exclamation-circle">
-
+      <i *ngIf="i == 4 && rowData.note.ind === 1" class="pi pi-exclamation-circle"
+      pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="top" [escape]="false">
       </i>
       {{ rowData[col.field] }}
      
