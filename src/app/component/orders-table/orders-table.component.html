@@ -159,25 +159,5 @@
 </p-tabPanel>
 
 </p-tabView>
-<p-toolbar>
-  <div class="p-toolbar-group-left">
-    
-<p-accordion>
-  <p-accordionTab header="Legend">
-    <i class="pi pi-book"> PowerPlan Indicator</i>
-    <br>
-    <i class="pi pi-exclamation-circle"> Lab Requisition Note Indicator</i>
-  </p-accordionTab>
-</p-accordion>
-  </div>
-  <div class="p-toolbar-group-right">
-    Last Refresh: {{futureOrderDS.LastRefesh}}
-    <span [ngStyle]="{width: '10px'}"></span>
-  
-    <p-button label="Refresh" icon="pi pi-refresh" (click)="tableRefresh();"></p-button>
-    <span [ngStyle]="{width: '10px'}"></span>
-    <p-button type="button" (click)="logChange($event)">Activate</p-button>
 
-  </div>
-</p-toolbar>
  
