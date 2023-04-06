@@ -13,8 +13,17 @@ html {
 
 .tdLessPadding {
     td {
-      padding: .2em .2em !important;
+      padding: .1em .1em !important;
     }
+
+    th {
+      padding: .1em .1em !important;
+    }
+
+    tr {
+      padding: .1em .1em !important;
+    }
+
   }
 
   ::ng-deep {

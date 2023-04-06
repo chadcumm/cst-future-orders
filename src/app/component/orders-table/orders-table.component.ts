@@ -82,12 +82,12 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
     this.cols = [
       
-      { field: 'orderMnemonic', header: 'Order' },
-      { field: 'orderingProvider', header: 'Provider', width: '150px' },
-      { field: 'orderingLocation', header: 'Ordering Location' , width: '170px'},
-      { field: 'origOrderDateVc', header: 'Order Date', width: '170px' },
-      { field: 'note.marker', header: 'Lab Req Note', width: '120px' },
-      { field: 'orderDetails', header: 'Details' },
+      { field: 'orderMnemonic', header: 'Order' , sort: false},
+      { field: 'orderingProvider', header: 'Provider', width: '150px', sort: false },
+      { field: 'orderingLocation', header: 'Ordering Location' , width: '170px', sort: false},
+      { field: 'origOrderDateVc', header: 'Order Date', width: '170px', sort: false },
+      { field: 'note.marker', header: 'Lab Req Note', width: '120px', sort: true },
+      { field: 'orderDetails', header: 'Details', sort: true },
     ];
   }
   ngAfterViewInit(): void {

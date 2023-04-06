@@ -8,7 +8,8 @@
   </div>
   <div class="p-toolbar-group-right">
 
-  <input type="text" pInputText [(ngModel)]="lookbackNumber" [style]="{width: '20px'}"/>
+  <input type="text" pInputText [(ngModel)]="lookbackNumber" [style]="{width: '20px', height:'34px'}"/>
+
   <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '100px'}"
@@ -16,7 +17,7 @@
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-  <input type="text" pInputText [(ngModel)]="lookforwardNumber" [style]="{width: '20px'}"/>
+  <input type="text" pInputText [(ngModel)]="lookforwardNumber" [style]="{width: '20px', height:'34px' }"/>
 
   <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward"  optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
@@ -51,8 +52,9 @@
 
   <span class="p-input-icon-left">
     <i class="pi pi-search"></i>
-    <input pInputText type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
-  </span>
+    <input pInputText [style]="{height:'34px'}" type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
+    
+    </span>
   
   <span [ngStyle]="{width: '10px'}"></span>
 
@@ -88,9 +90,9 @@
 <ng-template pTemplate="header" let-columns>
  
     <tr>
-      <th *ngFor="let col of columns" [ttSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+      <th *ngFor="let col of columns" [ttSortableColumnDisabled]="col.sort" [ttSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
         {{ col.header }}
-        <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+        <p-treeTableSortIcon *ngIf="col.sort === false" [field]="col.field"></p-treeTableSortIcon>
       </th>
     </tr>
   </ng-template>
