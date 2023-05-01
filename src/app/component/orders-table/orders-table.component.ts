@@ -9,7 +9,8 @@ import {  ChangeDetectionStrategy,
 import { FutureorderService } from 'src/app/service/futureorder.service';
 import { TreeNode,PrimeIcons,FilterService } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
-import { TreeTable } from 'primeng/treetable';
+import { TreeTable, TTBody } from 'primeng/treetable';
+import { MpageArrayInputComponent, mPageService } from '@clinicaloffice/clinical-office-mpage';
 
 interface Specimens {
   label: string,
@@ -31,6 +32,18 @@ interface LookOptions {
 export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
   @ViewChild("tt") treetable!: TreeTable;
+
+  TypicalLabs($event:any) :void {
+    console.log("TypicalLabs")
+    console.log($event) 
+    if ($event.checked == true) {
+      console.log("checked - show common")
+      this.treetable.filter('true','typicalLab','equals')
+    } else {
+      console.log("unchecked - show all")
+      this.treetable.filter('true','typicalLab','contains')
+    }
+  }
 
   cols!: any[];
   level: number = 0;
@@ -57,10 +70,14 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
   loading: boolean = false;
 
   files!: TreeNode[];
+
+  selectedOrders!: TreeNode[];
+
   constructor(
     public futureOrderDS: FutureorderService,
     public cdr: ChangeDetectorRef,
-    public filterService: FilterService
+    public filterService: FilterService,
+    public mPage: mPageService
   ) { 
 
     this.specimens = [
@@ -91,7 +108,8 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     ];
   }
   ngAfterViewInit(): void {
-    console.log("test")
+    console.log("ngAfterViewInit")
+    this.treetable.filter('true','typicalLab','equals')
   }
 
   ngDoCheck(): void {  
@@ -135,6 +153,38 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     }
     
   }
+
+  activaterOrders($event:any) :void {
+    console.log($event) 
+    console.log("activaterOrders")
+    
+    var d=new Date();
+      var twoDigit=function(num: string | number){(String(num).length<2)?num=String("0"+num):num=String(num);
+        return num;
+      };
+      var activateDate=""+d.getFullYear()+twoDigit((d.getMonth()+1))+twoDigit(d.getDate())+twoDigit(d.getHours())+twoDigit(d.getMinutes())+twoDigit(d.getSeconds())+"99";
+      console.log(activateDate)
+      // @ts-ignore
+      var PowerOrdersMPageUtils = window.external.DiscernObjectFactory("POWERORDERS");
+      var hMoew = null;
+      hMoew = PowerOrdersMPageUtils.CreateMOEW(this.mPage.personId, this.mPage.encntrId, 0, 2, 127)
+      
+    for (let ord of this.selectedOrders) {
+
+      if (ord.data.orderId > 0) {
+        this.mPage.putLog(`Order ID: ${ord.data.orderId}`)
+        var success=PowerOrdersMPageUtils.InvokeActivateAction(hMoew,ord.data.orderId,activateDate);
+      }
+    }
+
+    if(success){
+        PowerOrdersMPageUtils.SignOrders(hMoew);
+        PowerOrdersMPageUtils.DestroyMOEW(hMoew);
+    }
+  }   
+
+  
+
   
   logChange($event:any) :void {
     console.log($event) 

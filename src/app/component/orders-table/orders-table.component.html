@@ -1,4 +1,4 @@
-
+v2
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <!--
@@ -58,11 +58,13 @@
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-<!--span [ngStyle]="{width: '175px'}"-->
+<!--span [ngStyle]="{width: '175px'}"
+(onChange)="tt.filter($event.value, 'typicalLab', 'equals')"
+-->
   <p-checkbox 
   [binary]="true" 
   [(ngModel)]="typicalLab" 
-  (onChange)="tt.filter($event.checked, 'typicalLab', 'contains')"
+  (onChange)="TypicalLabs($event)"
   label="Exclude orders uncommonly activated by Lab"></p-checkbox>
 <!--/span-->
 </div>
@@ -73,14 +75,13 @@
 
 <p-treeTable 
 #tt
-    
     [value]="files"
     [columns]="cols"
     [reorderableColumns]="true"
     [scrollable]="true"
     [filterDelay]="0" [globalFilterFields]="['orderMnemonic']"
     [style]="{width:'100%'}"
-    
+    [(selection)]="selectedOrders"
     [metaKeySelection]="true"
     styleClass="tdLessPadding"
     [loading]="this.loading"
@@ -111,6 +112,7 @@
     >
     <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"-->
     <td 
+    (click)="logChange($event)"
       [ngClass]="{'kb-cell': rowData.hiddenData.dueStatusFlag === 1 }"
       [ngStyle]="{'width': col.width}"
       *ngFor="let col of columns; let i = index"
@@ -156,9 +158,6 @@
 </p-tabPanel>
 <p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}})">
 </p-tabPanel>
-<p-tabPanel header="All ({{this.orderCounts.all}})">
-  
-</p-tabPanel>
 
 </p-tabView>
 <p-toolbar>
@@ -170,9 +169,9 @@
     Last Refresh: {{futureOrderDS.LastRefesh}}
     <span [ngStyle]="{width: '10px'}"></span>
   
-    <p-button label="Refresh" icon="pi pi-refresh" (click)="tableRefresh();"></p-button>
+    <!--p-button label="Refresh" icon="pi pi-refresh" (click)="tableRefresh();"></p-button-->
     <span [ngStyle]="{width: '10px'}"></span>
-    <p-button type="button" (click)="logChange($event)">Activate</p-button>
+    <p-button type="button" (click)="activaterOrders($event)">Activate</p-button>
 
   </div>
 </p-toolbar>

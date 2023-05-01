@@ -13,26 +13,25 @@ html {
 
 .tdLessPadding {
     td {
-      padding: .1em .1em !important;
+      padding: 1px 1px !important;
     }
 
     th {
-      padding: .1em .1em !important;
+      padding: 1px 1px !important;
     }
 
     tr {
-      padding: .1em .1em !important;
+      padding: 1px 1px !important;
     }
 
   }
 
   ::ng-deep {
     .p-tooltip {
-        max-width: fit-content;
+        max-width: 750px;
      }
 } 
 
 .cmctooltip {
-
-  max-width: fit-content;
+  max-width: 750px;
 }
