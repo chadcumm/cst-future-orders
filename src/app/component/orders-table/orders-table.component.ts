@@ -138,7 +138,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
   tableRefresh(): void{
     this.loading = true;
-    //this.files = [];
+    this.files = [];
     this.futureOrderDS.refresh = true
     this.futureOrderDS.loadFutureOrders()
     if (this.futureOrderDS.refresh === true) {
@@ -176,10 +176,11 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
         var success=PowerOrdersMPageUtils.InvokeActivateAction(hMoew,ord.data.orderId,activateDate);
       }
     }
-
+    
     if(success){
         PowerOrdersMPageUtils.SignOrders(hMoew);
         PowerOrdersMPageUtils.DestroyMOEW(hMoew);
+        this.tableRefresh()
     }
   }   
 
