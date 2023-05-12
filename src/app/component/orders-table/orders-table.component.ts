@@ -6,11 +6,12 @@ import {  ChangeDetectionStrategy,
           ViewChild,
           AfterViewInit
          } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { FutureorderService } from 'src/app/service/futureorder.service';
 import { TreeNode,PrimeIcons,FilterService } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
 import { TreeTable, TTBody } from 'primeng/treetable';
-import { MpageArrayInputComponent, mPageService } from '@clinicaloffice/clinical-office-mpage';
+import { MpageArrayInputComponent, mPageService, CustomService } from '@clinicaloffice/clinical-office-mpage';
 
 interface Specimens {
   label: string,
@@ -19,7 +20,14 @@ interface Specimens {
 
 interface LookOptions {
   label: string,
-  value: number 
+  value: string 
+}
+
+interface TimeFilters {
+  lookbackNumber: number,
+  lookbackOption: LookOptions,
+  lookforwardNumber: number,
+  lookforwardOption: LookOptions
 }
 
 @Component({
@@ -33,6 +41,8 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
   @ViewChild("tt") treetable!: TreeTable;
 
+  timeFilterGroup = new FormGroup({selLookback: new FormControl()});
+
   TypicalLabs($event:any) :void {
     console.log("TypicalLabs")
     console.log($event) 
@@ -45,6 +55,37 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  TimeFilter($event:any) :void {
+    console.log("Time Filter")
+    this.timefilters = [
+      {'lookbackNumber': this.lookbackNumber,
+      'lookbackOption': this.selectedLookback,
+      'lookforwardNumber': this.lookforwardNumber,
+      'lookforwardOption': this.selectedLookforward}
+    ]
+
+    console.log(JSON.stringify(this.timefilters[0]))
+    
+    
+    this.customService.executeDmInfoAction('timeFilterPref', 'w', [
+      {
+          infoDomain: 'CST Future Order Mpage',
+          infoName: 'timeFilters',
+          infoDate: new Date(),
+          infoChar: JSON.stringify(this.timefilters),
+          infoNumber: 0,
+          infoLongText: '',
+          infoDomainId: this.mPage.prsnlId
+      }
+  ]);
+    
+      let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
+      let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
+      console.log(`going to table refresh with ${vLookback} and ${vLookforward}`)
+      this.tableRefresh(vLookback,vLookforward)
+  }
+
+
   cols!: any[];
   level: number = 0;
   specimens: Specimens[] = [];
@@ -54,6 +95,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
   lookforwardOptions: LookOptions[] = [];
   lookforwardNumber: number = 1;
 
+  timefilters: TimeFilters[] = [];
 
   expanded: boolean = false;
   
@@ -77,7 +119,8 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     public futureOrderDS: FutureorderService,
     public cdr: ChangeDetectorRef,
     public filterService: FilterService,
-    public mPage: mPageService
+    public mPage: mPageService,
+    public customService: CustomService
   ) { 
 
     this.specimens = [
@@ -86,15 +129,15 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     ]
 
     this.loobackOptions = [
-      {label: "Months", value: 1},
-      {label: "Weeks", value: 2},
-      {label: "Days", value: 3}
+      {label: "Months", value: 'M'},
+      {label: "Weeks", value: 'W'},
+      {label: "Days", value: 'D'}
     ]
 
     this.lookforwardOptions = [
-      {label: "Months", value: 1},
-      {label: "Weeks", value: 2},
-      {label: "Days", value: 3}
+      {label: "Months", value: 'M'},
+      {label: "Weeks", value: 'W'},
+      {label: "Days", value: 'D'}
     ]
 
     this.cols = [
@@ -129,18 +172,49 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     this.orderCounts = this.futureOrderDS.orderCounts
     this.loading = false;
     
-    //this.selectedLookforward.label = "Months";
-    //this.selectedLookback.label = "Months";
     
+    this.customService.executeDmInfoAction('timeFilterPref', 'r', [
+      {
+          infoDomain: 'CST Future Order Mpage',
+          infoName: 'timeFilters',
+          infoDate: new Date(),
+          infoChar: '',
+          infoNumber: 0,
+          infoLongText: '',
+          infoDomainId: this.mPage.prsnlId
+      }
+  ], () => { this.useTimeFilterCallback() });
+  
+  
+
     console.log(this.files)
+  }
+  
+
+  useTimeFilterCallback(): void {
+    if (this.customService.isLoaded('timeFilterPref')) {
+      this.timefilters = JSON.parse(this.customService.get('timeFilterPref').dmInfo[0].infoChar)
+      
+      console.log(JSON.stringify(this.timefilters))
+      
+      this.selectedLookforward = this.timefilters[0].lookforwardOption//{label: 'Weeks', value: 'weeks'}
+      this.selectedLookback = this.timefilters[0].lookbackOption
+      this.lookbackNumber = this.timefilters[0].lookbackNumber
+      this.lookforwardNumber = this.timefilters[0].lookforwardNumber
+      
+      let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
+      let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
+      console.log(`going to table refresh with ${vLookback} and ${vLookforward}`)
+      this.tableRefresh(vLookback,vLookforward)
+    }
   }
 
 
-  tableRefresh(): void{
+  tableRefresh(lookback?:string, lookforward?:string): void{
     this.loading = true;
     this.files = [];
     this.futureOrderDS.refresh = true
-    this.futureOrderDS.loadFutureOrders()
+    this.futureOrderDS.loadFutureOrders(lookback,lookforward)
     if (this.futureOrderDS.refresh === true) {
       setTimeout(() => {
         this.futureOrderDS.refresh = false;
@@ -149,15 +223,41 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
         console.log(this.files)
         this.cdr.detectChanges();
         this.loading = false;
-      }, 500);
+      }, 1000);
     }
     
   }
+
+  _window() {
+    return window;
+ }
 
   activaterOrders($event:any) :void {
     console.log($event) 
     console.log("activaterOrders")
     
+
+    //need to add in updates to order details
+    for (let ord of this.selectedOrders) {
+        if (ord.data.hiddenData.needLabCollection == 1) {
+          //window.alert("needs collection flipped")
+          // @ts-ignore
+          var OEFRequest = window.external.XMLCclRequest();						
+          OEFRequest.open("GET","bc_cmc_test",false);
+          OEFRequest.send("~MINE~,"+ord.data.orderId+",~NURSECOLLECT~")
+        }
+    }
+
+    for (let ord of this.selectedOrders) {
+      if (ord.data.hiddenData.needDateUpdate == 1) {
+       // window.alert("needs collection date time updated")
+        // @ts-ignore
+        var OEFRequest = window.external.XMLCclRequest();						
+        OEFRequest.open("GET","bc_cmc_test",false);
+        OEFRequest.send("~MINE~,"+ord.data.orderId+",~COLLECTIONDATE~")
+      }
+  }
+
     var d=new Date();
       var twoDigit=function(num: string | number){(String(num).length<2)?num=String("0"+num):num=String(num);
         return num;
@@ -190,6 +290,14 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
   logChange($event:any) :void {
     console.log($event) 
     console.log("logChange")
+  } 
+
+  rowClick(node:any) :void {
+    console.log("start rowclick")
+    console.log(node) 
+    console.log(this.selectedOrders)
+    this.treetable.toggleNodeWithCheckbox(node)
+    console.log("end rowclick")
   } 
 
   toggleVisibility(isChecked: boolean)

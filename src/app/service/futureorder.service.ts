@@ -10,23 +10,29 @@ export class FutureorderService {
   public FutureOrdersLoading: boolean = false;
   public LastRefesh: string = "";
   public refresh = false;
+  public isLoaded = false;
 
   constructor(
       private futureOrderService: CustomService
       
       ) { }
 
-  public loadFutureOrders(): void{
+  public loadFutureOrders(lookback?:string, lookforward?:string): void{
     this.FutureOrdersLoading = true;
+    this.isLoaded = false;
 
-
+    console.log(`loadFutureOrders: ${lookback} and ${lookforward}`)
     this.futureOrderService.load({
       customScript: {
         script: [
           {
-            name: '2bc_all_future_orders:group1',
+            name: '3bc_all_future_orders:group1',
             run: 'pre',
-            id: 'futureorders'
+            id: 'futureorders',
+            parameters: {
+              'lookback': lookback,
+              'lookforward': lookforward
+            }
           }
         ]
       }
@@ -34,6 +40,7 @@ export class FutureorderService {
       this.FutureOrdersLoading = false 
       this.LastRefesh = this.futureOrderService.get('futureorders').lastrefesh
       this.refresh = true;
+      this.isLoaded = true;
     }));
   }
 
@@ -61,6 +68,7 @@ export class FutureorderService {
   // Determine if Future Ordres have been loaded
   public get futureOrdersLoaded(): boolean {
     return this.futureOrderService.isLoaded('futureorders');
+    //return this.isLoaded
     //return true;
   }
 

@@ -1,4 +1,3 @@
-v2
 <p-toolbar>
   <div class="p-toolbar-group-left">
     <!--
@@ -7,22 +6,22 @@ v2
   -->
   </div>
   <div class="p-toolbar-group-right">
-
-  <input type="text" pInputText [(ngModel)]="lookbackNumber" [style]="{width: '20px', height:'34px'}"/>
+  
+  <input type="text" pInputText [(ngModel)]="lookbackNumber" (blur)="TimeFilter($event)" [style]="{width: '40px', height:'34px'}"/>
 
   <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '100px'}"
-  (onChange)="tt.filter($event.value.value, 'lookbackMonth', 'lte')" ></p-dropdown>
-  
+  (onChange)="TimeFilter($event)" ></p-dropdown>
+
   <span [ngStyle]="{width: '10px'}"></span>
 
-  <input type="text" pInputText [(ngModel)]="lookforwardNumber" [style]="{width: '20px', height:'34px' }"/>
+  <input type="text" pInputText [(ngModel)]="lookforwardNumber" (blur)="TimeFilter($event)" [style]="{width: '40px', height:'34px' }"/>
 
   <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward"  optionLabel="label"
 	[showClear]="false" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '100px'}"
-  (onChange)="tt.filter($event.value.value, 'lookforwardMonth', 'lte')" ></p-dropdown>
+  (onChange)="TimeFilter($event)" ></p-dropdown>
   
   <span [ngStyle]="{width: '10px'}"></span>
 
@@ -85,6 +84,7 @@ v2
     [metaKeySelection]="true"
     styleClass="tdLessPadding"
     [loading]="this.loading"
+    (onFilter)="logChange($event)"
 > 
 
 
@@ -105,14 +105,11 @@ v2
 >
   <tr 
     [ttRow]="rowNode" 
-    [ttSelectableRow]="rowNode"
     [ngClass]="{'kb-row': rowData.hiddenData.dueStatusFlag === 1 }"
-    
-
     >
-    <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="tooltip"  tooltipPosition="left"-->
+    <!--pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="left"-->
     <td 
-    (click)="logChange($event)"
+    (click)="rowClick(rowNode.node)"
       [ngClass]="{'kb-cell': rowData.hiddenData.dueStatusFlag === 1 }"
       [ngStyle]="{'width': col.width}"
       *ngFor="let col of columns; let i = index"
@@ -156,7 +153,7 @@ v2
 </ng-template>
 </p-treeTable>
 </p-tabPanel>
-<p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}})">
+<p-tabPanel header="v1 Cardiology ({{this.orderCounts.cardiology}})">
 </p-tabPanel>
 
 </p-tabView>
@@ -175,4 +172,4 @@ v2
 
   </div>
 </p-toolbar>
- 
+
