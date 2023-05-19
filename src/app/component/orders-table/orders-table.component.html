@@ -6,7 +6,7 @@
   -->
   </div>
   <div class="p-toolbar-group-right">
-  
+  Look Back <span [ngStyle]="{width: '10px'}"></span>
   <input type="text" pInputText [(ngModel)]="lookbackNumber" (blur)="TimeFilter($event)" [style]="{width: '40px', height:'34px'}"/>
 
   <p-dropdown [options]="this.loobackOptions" [(ngModel)]="selectedLookback" optionLabel="label"
@@ -15,7 +15,7 @@
   (onChange)="TimeFilter($event)" ></p-dropdown>
 
   <span [ngStyle]="{width: '10px'}"></span>
-
+  Look Forward <span [ngStyle]="{width: '10px'}"></span>
   <input type="text" pInputText [(ngModel)]="lookforwardNumber" (blur)="TimeFilter($event)" [style]="{width: '40px', height:'34px' }"/>
 
   <p-dropdown [options]="this.lookforwardOptions" [(ngModel)]="selectedLookforward"  optionLabel="label"
@@ -69,7 +69,7 @@
 </div>
 </p-toolbar>
 
-<p-tabView>
+<p-tabView> <!--(onChange)="this.tabChange($event)"-->
   <p-tabPanel header="Labs ({{this.orderCounts.lab}})">
 
 <p-treeTable 
@@ -115,7 +115,7 @@
       *ngFor="let col of columns; let i = index"
       
       > 
-      <div *ngIf="i == 0 && rowData.orderId === 0">{{rowData.requestedStartDateVc}}</div>
+      <div *ngIf="i == 0 && rowData.orderId === 0">{{rowData.requestedStartDateVc}} - {{rowData.orderingProvider}}</div>
       <p-treeTableToggler
         [rowNode]="rowNode"
         *ngIf="i == 0"
@@ -153,10 +153,21 @@
 </ng-template>
 </p-treeTable>
 </p-tabPanel>
-<p-tabPanel header="v1 Cardiology ({{this.orderCounts.cardiology}})">
+
+
+
+
+
+<p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}}) ">
+
 </p-tabPanel>
 
 </p-tabView>
+
+
+
+
+
 <p-toolbar>
   <div class="p-toolbar-group-left">
     

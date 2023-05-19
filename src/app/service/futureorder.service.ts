@@ -17,7 +17,7 @@ export class FutureorderService {
       
       ) { }
 
-  public loadFutureOrders(lookback?:string, lookforward?:string): void{
+  public loadFutureOrders(lookback?:string, lookforward?:string, orderType?:number ): void{
     this.FutureOrdersLoading = true;
     this.isLoaded = false;
 
@@ -31,7 +31,8 @@ export class FutureorderService {
             id: 'futureorders',
             parameters: {
               'lookback': lookback,
-              'lookforward': lookforward
+              'lookforward': lookforward,
+              'orderType' : orderType
             }
           }
         ]

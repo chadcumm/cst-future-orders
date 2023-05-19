@@ -115,6 +115,8 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
   selectedOrders!: TreeNode[];
 
+  orderType: number = 0;
+
   constructor(
     public futureOrderDS: FutureorderService,
     public cdr: ChangeDetectorRef,
@@ -143,7 +145,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     this.cols = [
       
       { field: 'orderMnemonic', header: 'Order' , sort: false},
-      { field: 'orderingProvider', header: 'Provider', width: '150px', sort: false },
+      //{ field: 'orderingProvider', header: 'Provider', width: '150px', sort: false },
       { field: 'orderingLocation', header: 'Ordering Location' , width: '170px', sort: false},
       { field: 'origOrderDateVc', header: 'Order Date', width: '170px', sort: false },
       { field: 'note.marker', header: 'Lab Req Note', width: '120px', sort: true },
@@ -209,12 +211,21 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  tabChange(event: any): void {
+    console.log(`tabChange: ${event.index}`)
+    let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
+    let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
+    this.orderType = event.index
+    this.tableRefresh(vLookback,vLookforward,this.orderType)
 
-  tableRefresh(lookback?:string, lookforward?:string): void{
+
+  }
+
+  tableRefresh(lookback?:string, lookforward?:string, orderType?:number): void{
     this.loading = true;
     this.files = [];
     this.futureOrderDS.refresh = true
-    this.futureOrderDS.loadFutureOrders(lookback,lookforward)
+    this.futureOrderDS.loadFutureOrders(lookback,lookforward,orderType)
     if (this.futureOrderDS.refresh === true) {
       setTimeout(() => {
         this.futureOrderDS.refresh = false;
