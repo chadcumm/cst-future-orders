@@ -1,8 +1,8 @@
 import {  ChangeDetectionStrategy, 
           Component, 
           OnInit, 
-          DoCheck, 
-          ChangeDetectorRef, 
+          //DoCheck, 
+          //ChangeDetectorRef, 
           ViewChild,
           AfterViewInit
          } from '@angular/core';
@@ -37,26 +37,26 @@ interface TimeFilters {
   })
 
 
-export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
+export class OrdersTableComponent implements OnInit, AfterViewInit {
 
   @ViewChild("tt") treetable!: TreeTable;
 
   timeFilterGroup = new FormGroup({selLookback: new FormControl()});
 
   TypicalLabs($event:any) :void {
-    console.log("TypicalLabs")
-    console.log($event) 
+    //console.log("TypicalLabs")
+    //console.log($event) 
     if ($event.checked == true) {
-      console.log("checked - show common")
+      //console.log("checked - show common")
       this.treetable.filter('true','typicalLab','equals')
     } else {
-      console.log("unchecked - show all")
+      //console.log("unchecked - show all")
       this.treetable.filter('true','typicalLab','contains')
     }
   }
 
   TimeFilter($event:any) :void {
-    console.log("Time Filter")
+    //console.log("Time Filter")
     this.timefilters = [
       {'lookbackNumber': this.lookbackNumber,
       'lookbackOption': this.selectedLookback,
@@ -81,8 +81,8 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     
       let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
       let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
-      console.log(`going to table refresh with ${vLookback} and ${vLookforward}`)
-      this.tableRefresh(vLookback,vLookforward)
+      //console.log(`going to table refresh with ${vLookback} and ${vLookforward}`)
+      this.tableRefresh(vLookback,vLookforward,this.orderType)
   }
 
 
@@ -119,7 +119,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
 
   constructor(
     public futureOrderDS: FutureorderService,
-    public cdr: ChangeDetectorRef,
+    //public cdr: ChangeDetectorRef,
     public filterService: FilterService,
     public mPage: mPageService,
     public customService: CustomService
@@ -153,7 +153,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     ];
   }
   ngAfterViewInit(): void {
-    console.log("ngAfterViewInit")
+    //console.log("ngAfterViewInit")
     this.treetable.filter('true','typicalLab','equals')
   }
 
@@ -162,7 +162,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
       setTimeout(() => {
         this.futureOrderDS.refresh = false;
       });
-      this.cdr.detectChanges();
+      //this.cdr.detectChanges();
     }
      
     }
@@ -187,9 +187,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
       }
   ], () => { this.useTimeFilterCallback() });
   
-  
-
-    console.log(this.files)
+    //console.log(this.files)
   }
   
 
@@ -197,7 +195,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.customService.isLoaded('timeFilterPref')) {
       this.timefilters = JSON.parse(this.customService.get('timeFilterPref').dmInfo[0].infoChar)
       
-      console.log(JSON.stringify(this.timefilters))
+      //console.log(JSON.stringify(this.timefilters))
       
       this.selectedLookforward = this.timefilters[0].lookforwardOption//{label: 'Weeks', value: 'weeks'}
       this.selectedLookback = this.timefilters[0].lookbackOption
@@ -207,18 +205,27 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
       let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
       let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
       console.log(`going to table refresh with ${vLookback} and ${vLookforward}`)
-      this.tableRefresh(vLookback,vLookforward)
+      this.tableRefresh(vLookback,vLookforward,this.orderType)
     }
   }
 
   tabChange(event: any): void {
-    console.log(`tabChange: ${event.index}`)
+     
+    //console.log(`tabChange: ${event}`)
+    //console.log(event)
     let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
     let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
-    this.orderType = event.index
+    this.orderType = event
+    if (this.orderType == 1) {
+      this.typicalLab = false;
+      this.treetable.filter('true','typicalLab','contains')
+    } else {
+      this.typicalLab = true;
+      this.treetable.filter('true','typicalLab','equals')
+    }
+    
     this.tableRefresh(vLookback,vLookforward,this.orderType)
-
-
+    
   }
 
   tableRefresh(lookback?:string, lookforward?:string, orderType?:number): void{
@@ -226,15 +233,16 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
     this.files = [];
     this.futureOrderDS.refresh = true
     this.futureOrderDS.loadFutureOrders(lookback,lookforward,orderType)
-    if (this.futureOrderDS.refresh === true) {
+    if (this.futureOrderDS.refresh == true) {
       setTimeout(() => {
         this.futureOrderDS.refresh = false;
         this.files = [...this.futureOrderDS.futureOrders];
-        console.log(this.futureOrderDS.LastRefesh)
-        console.log(this.files)
-        this.cdr.detectChanges();
+        this.orderCounts = this.futureOrderDS.orderCounts
+        //.log(this.futureOrderDS.LastRefesh)
+        //console.log(this.files)
+        //this.cdr.detectChanges();
         this.loading = false;
-      }, 1000);
+      }, 1500);
     }
     
   }
@@ -304,11 +312,11 @@ export class OrdersTableComponent implements OnInit, AfterViewInit, DoCheck {
   } 
 
   rowClick(node:any) :void {
-    console.log("start rowclick")
-    console.log(node) 
-    console.log(this.selectedOrders)
+    //console.log("start rowclick")
+    //console.log(node) 
+    //console.log(this.selectedOrders)
     this.treetable.toggleNodeWithCheckbox(node)
-    console.log("end rowclick")
+    //console.log("end rowclick")
   } 
 
   toggleVisibility(isChecked: boolean)
@@ -405,7 +413,9 @@ onCollapseOneLevel() {
 
 expandNodes(nodes: TreeNode<any>[]) {
   for (let node of nodes) {
+    
     node.expanded = true;
+    
   }
 }
 
@@ -433,5 +443,43 @@ traverse(
   }
 }
 
+rowTrackBy(index:number, row:any){
+  if(row.node.data.id){
+    return row.node.data.id;
+  }else{
+    return row.node.data.title;
+  }
+}
+
+onNodeExpand(event: any) {
+  //console.log(event.node.children)
+  //this.expandNodes(event.node.children)
+  this.onExpandThisLevel(event.node)
+}
+
+onExpandThisLevel(event: any) {
+  
+  //if (this.expanded === false) {
+  if (this.level === 2) {
+    console.log("expanded")
+    this.expandNodes(this.files);
+  } else {
+    console.log("traverse")
+    this.traverse(
+      this.files,
+      (o, prop, value) => {
+        if (prop === "children") {
+          this.expandNodes(value);
+        }
+      },
+      this.level
+    );
+  }
+
+  this.level++;
+  this.files = [...this.files];
+  this.expanded = true
+}
+//}
 
 }

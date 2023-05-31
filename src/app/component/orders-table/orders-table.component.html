@@ -1,9 +1,10 @@
 <p-toolbar>
+  <table><tr><td>
   <div class="p-toolbar-group-left">
     <!--
     <button pButton type="button" (click)="onExpandOneLevel()" class="p-button-outlined">Expand</button>
     <button pButton type="button" (click)="onCollapseOneLevel()" class="p-button-outlined">Collapse</button>
-  -->
+    -->
   </div>
   <div class="p-toolbar-group-right">
   Look Back <span [ngStyle]="{width: '10px'}"></span>
@@ -67,24 +68,33 @@
   label="Exclude orders uncommonly activated by Lab"></p-checkbox>
 <!--/span-->
 </div>
+</td></tr></table>
 </p-toolbar>
 
-<p-tabView> <!--(onChange)="this.tabChange($event)"-->
-  <p-tabPanel header="Labs ({{this.orderCounts.lab}})">
 
-<p-treeTable 
+<span class="p-buttonset">
+  <button pButton type="button" value=0 (click)="this.tabChange(0)" label="Labs" 
+  [ngClass]="this.orderType == 0 ? 'p-button-raised' : 'p-button-text'">
+  </button>
+  <button pButton type="button" value=1 (click)="this.tabChange(1)" label="Cardiology" 
+  [ngClass]="this.orderType == 1 ? 'p-button-raised' : 'p-button-text'">
+</button>
+
+
+</span>
+
+<p-treeTable  
 #tt
     [value]="files"
     [columns]="cols"
-    [reorderableColumns]="true"
     [scrollable]="true"
     [filterDelay]="0" [globalFilterFields]="['orderMnemonic']"
     [style]="{width:'100%'}"
     [(selection)]="selectedOrders"
-    [metaKeySelection]="true"
     styleClass="tdLessPadding"
     [loading]="this.loading"
-    (onFilter)="logChange($event)"
+    sortMode="multiple"
+    
 > 
 
 
@@ -115,7 +125,7 @@
       *ngFor="let col of columns; let i = index"
       
       > 
-      <div *ngIf="i == 0 && rowData.orderId === 0">{{rowData.requestedStartDateVc}} - {{rowData.orderingProvider}}</div>
+      <div *ngIf="i == 0 && rowData.orderId === 0"><b>{{rowData.requestedStartDateVc}}</b> - {{rowData.orderingProvider}}</div>
       <p-treeTableToggler
         [rowNode]="rowNode"
         *ngIf="i == 0"
@@ -137,7 +147,8 @@
           src="assets/comment.gif"
         />
       </span>
-      <i *ngIf="i == 4 && rowData.note.ind === 1" class="pi pi-exclamation-circle"
+      <!--need to move lab note column-->
+      <i *ngIf="i == 3 && rowData.note.ind === 1" class="pi pi-exclamation-circle"
       pTooltip={{rowData.hoverInfo}} tooltipStyleClass="cmctooltip"  tooltipPosition="top" [escape]="false">
       </i>
       {{ rowData[col.field] }}
@@ -152,20 +163,6 @@
   </tr>
 </ng-template>
 </p-treeTable>
-</p-tabPanel>
-
-
-
-
-
-<p-tabPanel header="Cardiology ({{this.orderCounts.cardiology}}) ">
-
-</p-tabPanel>
-
-</p-tabView>
-
-
-
 
 
 <p-toolbar>

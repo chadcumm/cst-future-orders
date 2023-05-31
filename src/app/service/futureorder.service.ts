@@ -21,7 +21,7 @@ export class FutureorderService {
     this.FutureOrdersLoading = true;
     this.isLoaded = false;
 
-    console.log(`loadFutureOrders: ${lookback} and ${lookforward}`)
+    console.log(`loadFutureOrders: ${lookback} and ${lookforward} for orderType=${orderType}`)
     this.futureOrderService.load({
       customScript: {
         script: [
