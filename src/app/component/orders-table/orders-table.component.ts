@@ -12,6 +12,7 @@ import { TreeNode,PrimeIcons,FilterService } from 'primeng/api';
 import { ThisReceiver } from '@angular/compiler';
 import { TreeTable, TTBody } from 'primeng/treetable';
 import { MpageArrayInputComponent, mPageService, CustomService } from '@clinicaloffice/clinical-office-mpage';
+import { JsonPipe } from '@angular/common';
 
 interface Specimens {
   label: string,
@@ -40,6 +41,9 @@ interface TimeFilters {
 export class OrdersTableComponent implements OnInit, AfterViewInit {
 
   @ViewChild("tt") treetable!: TreeTable;
+  @ViewChild("specimenInput") specimenInput!: any;
+  @ViewChild("providerInput") providerInput!: any;
+  @ViewChild("locationInput") locationInput!: any;
 
   timeFilterGroup = new FormGroup({selLookback: new FormControl()});
 
@@ -153,7 +157,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
     ];
   }
   ngAfterViewInit(): void {
-    //console.log("ngAfterViewInit")
+    console.log("support="+this.futureOrderDS.supportToolEndabled)
     this.treetable.filter('true','typicalLab','equals')
   }
 
@@ -213,6 +217,20 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
      
     //console.log(`tabChange: ${event}`)
     //console.log(event)
+    //TO-DO Need to clear all filters when switching tabs
+    //To-DO need to clear out the list of selected orders after activate. 
+     
+    //this.treetable.filter('', 'specimenType', 'notEquals')
+    //this.treetable.filter('', 'orderingProvider', 'notEquals')
+    //this.treetable.filter('', 'orderingLocation', 'notEquals')
+    //this.selectedLocation = '';
+    //this.selectedProvider = '';
+    //this.selectedSpecimen = {label: '', value:''};
+
+    this.specimenInput.clear();
+    this.locationInput.clear();
+    this.providerInput.clear();
+
     let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
     let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}`
     this.orderType = event
@@ -253,9 +271,9 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
 
   activaterOrders($event:any) :void {
     console.log($event) 
-    console.log("activaterOrders")
-    
-
+    this.mPage.putLog(`ActivateOrders Started`)
+    console.log(this.selectedOrders)
+    console.log(this.mPage.encntrId)
     //need to add in updates to order details
     for (let ord of this.selectedOrders) {
         if (ord.data.hiddenData.needLabCollection == 1) {
@@ -288,19 +306,29 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
       var hMoew = null;
       hMoew = PowerOrdersMPageUtils.CreateMOEW(this.mPage.personId, this.mPage.encntrId, 0, 2, 127)
       
-    for (let ord of this.selectedOrders) {
+      for (let ord of this.selectedOrders) {
 
-      if (ord.data.orderId > 0) {
+        if (ord.data.orderId > 0) {
         this.mPage.putLog(`Order ID: ${ord.data.orderId}`)
+        this.mPage.putLog("~MINE~,"+ord.data.orderId+","+this.mPage.encntrId+","+ord.data.hiddenData.needLabCollection+","+ord.data.hiddenData.needDateUpdate) 
+        //console.log("~MINE~,"+ord.data.orderId+","+this.mPage.encntrId+","+ord.data.hiddenData.needLabCollection+","+ord.data.hiddenData.needDateUpdate) 
+        // @ts-ignore
+        var OEFRequest = window.external.XMLCclRequest();						
+        OEFRequest.open("GET","3bc_cmc_test",false);
+        OEFRequest.send("~MINE~,"+ord.data.orderId+","+this.mPage.encntrId+","+ord.data.hiddenData.needLabCollection+","+ord.data.hiddenData.needDateUpdate)
+       
         var success=PowerOrdersMPageUtils.InvokeActivateAction(hMoew,ord.data.orderId,activateDate);
+        }
       }
-    }
     
     if(success){
-        PowerOrdersMPageUtils.SignOrders(hMoew);
-        PowerOrdersMPageUtils.DestroyMOEW(hMoew);
+        PowerOrdersMPageUtils.SignOrders(hMoew);    
         this.tableRefresh()
     }
+
+    this.selectedOrders = [];
+    this.mPage.putLog("Ending ActivateOrders")
+    PowerOrdersMPageUtils.DestroyMOEW(hMoew);
   }   
 
   
@@ -481,5 +509,15 @@ onExpandThisLevel(event: any) {
   this.expanded = true
 }
 //}
+
+OpenSupportTools(event: any) {
+  console.log("starging OpenSupportTools")
+
+  const el = document.getElementById('applink');
+        // @ts-ignore
+        el.href = "javascript:APPLINK(0,'discernreportviewer.exe','/PARAMS=%22MINE%22 /PROGRAM=bc_all_future_ord_support_tool /LEFT=100 /TOP=100 /WIDTH=1024 /HEIGHT=800')"
+      // @ts-ignore
+      el.click();
+}
 
 }

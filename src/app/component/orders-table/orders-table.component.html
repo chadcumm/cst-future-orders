@@ -1,5 +1,5 @@
 <p-toolbar>
-  <table><tr><td>
+  <table><tr><td class='vertical-align: bottom;'>
   <div class="p-toolbar-group-left">
     <!--
     <button pButton type="button" (click)="onExpandOneLevel()" class="p-button-outlined">Expand</button>
@@ -26,7 +26,7 @@
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-<p-dropdown [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
+<p-dropdown #specimenInput [options]="specimens" [(ngModel)]="selectedSpecimen" placeholder="Specimen Type" optionLabel="label"
 	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '170px'}"
   (onChange)="tt.filter($event.value.value, 'specimenType', 'equals')"
@@ -34,7 +34,7 @@
   
   <span [ngStyle]="{width: '10px'}"></span>
 
-<p-dropdown [options]="futureOrderDS.providerList" [(ngModel)]="selectedProvider" placeholder="Provider" optionLabel="label"
+<p-dropdown #providerInput [options]="futureOrderDS.providerList" [(ngModel)]="selectedProvider" placeholder="Provider" optionLabel="label"
 	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '130px'}"
   (onChange)="tt.filter($event.value.value, 'orderingProvider', 'equals')"
@@ -42,7 +42,7 @@
 
   <span [ngStyle]="{width: '10px'}"></span>
 
-  <p-dropdown [options]="futureOrderDS.orderingList" [(ngModel)]="selectedLocation" placeholder="Ordering Location" optionLabel="label"
+  <p-dropdown #locationInput [options]="futureOrderDS.orderingList" [(ngModel)]="selectedLocation" placeholder="Ordering Location" optionLabel="label"
 	[showClear]="true" [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'"
   [style]="{width: '170px'}"
   (onChange)="tt.filter($event.value.value, 'orderingLocation', 'equals')"
@@ -52,7 +52,7 @@
 
   <span class="p-input-icon-left">
     <i class="pi pi-search"></i>
-    <input pInputText [style]="{height:'34px'}" type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />`
+    <input pInputText [style]="{height:'34px'}" type="text" (input)="tt.filterGlobal($any($event.target).value, 'contains')" placeholder="Order Search" />
     
     </span>
   
@@ -73,10 +73,10 @@
 
 
 <span class="p-buttonset">
-  <button pButton type="button" value=0 (click)="this.tabChange(0)" label="Labs" 
+  <button pButton type="button" value=0 (click)="this.tabChange(0)" label="Labs ({{this.orderCounts.lab}})"  
   [ngClass]="this.orderType == 0 ? 'p-button-raised' : 'p-button-text'">
   </button>
-  <button pButton type="button" value=1 (click)="this.tabChange(1)" label="Cardiology" 
+  <button pButton type="button" value=1 (click)="this.tabChange(1)" label="Cardiology ({{this.orderCounts.cardiology}})"  
   [ngClass]="this.orderType == 1 ? 'p-button-raised' : 'p-button-text'">
 </button>
 
@@ -167,7 +167,9 @@
 
 <p-toolbar>
   <div class="p-toolbar-group-left">
-    
+   
+    <a href="#" id="applink" *ngIf="this.futureOrderDS.supportToolEndabled" (click)="OpenSupportTools($event)">
+      Support Tools</a>
 
   </div>
   <div class="p-toolbar-group-right">

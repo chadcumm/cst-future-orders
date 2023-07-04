@@ -79,4 +79,17 @@ export class FutureorderService {
     return this.futureOrderService.get('futureorders').counts
     //return(this.orderJSON[0].orderList)
   }
+
+   //Returns Support Tool Indicated
+   public get supportToolEndabled(): boolean  {
+    //console.log(this.futureOrderService.get('futureorders').supportToolInd)
+    if (this.futureOrderService.get('futureorders').supportToolInd == 'true') {
+        return true
+    } else {
+        return false
+    }
+    
+    //return this.futureOrderService.get('futureorders').supportToolInd
+    //return(this.orderJSON[0].orderList)
+  }
 }
