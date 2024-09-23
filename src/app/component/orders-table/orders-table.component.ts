@@ -158,6 +158,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     console.log("support="+this.futureOrderDS.supportToolEndabled)
+    console.log("activateButton="+this.futureOrderDS.activateButtonEndabled)
     this.treetable.filter('true','typicalLab','equals')
   }
 

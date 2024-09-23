@@ -90,6 +90,16 @@ export class FutureorderService {
     }
   }
 
+  //Returns Support Tool Indicated
+  public get activateButtonEndabled(): boolean  {
+    //console.log(this.futureOrderService.get('futureorders').supportToolInd)
+    if (this.futureOrderService.get('futureorders').activateButtonInd == 'true') {
+        return true
+    } else {
+        return false
+    }
+  }
+
        //Returns Support Tool Indicated
    public get liveEnabled(): boolean  {
     //console.log(this.futureOrderService.get('futureorders').supportToolInd)

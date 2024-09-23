@@ -195,7 +195,7 @@
   
     <!--p-button label="Refresh" icon="pi pi-refresh" (click)="tableRefresh();"></p-button-->
     <span [ngStyle]="{width: '10px'}"></span>
-    <p-button type="button" (click)="activaterOrders($event)">Activate</p-button>
+    <p-button type="button" *ngIf="this.futureOrderDS.activateButtonEndabled" (click)="activaterOrders($event)">Activate</p-button>
 
   </div>
 </p-toolbar>
