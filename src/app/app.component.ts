@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mPageService } from "@clinicaloffice/clinical-office-mpage";
+import { mPageService, PersonService, EncounterService } from "@clinicaloffice/clinical-office-mpage";
+import { FutureorderService } from './service/futureorder.service';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [FutureorderService] 
 })
 export class AppComponent implements OnInit {
 
   constructor(
     public activatedRoute: ActivatedRoute,
-    public mPage: mPageService
+    public mPage: mPageService,
+    public personService: PersonService,
+    public encntrService: EncounterService,
+    public futureOrdersService: FutureorderService
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +34,9 @@ export class AppComponent implements OnInit {
       this.mPage.setMaxInstances(2, true, 'CHART');
 
       // Add your initialization code here - do not place outside setTimeout function
+      //this.personService.load();
+      //this.encntrService.load();
+     this.futureOrdersService.loadFutureOrders();
     }, 0);
   }
 
