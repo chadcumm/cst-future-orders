@@ -1,3 +1,10 @@
+<div *ngIf="this.futureOrderDS.liveEnabled">
+    <h2><font style="color:red"><u>
+      {{this.futureOrderDS.supportMessage}}
+    </u></font></h2>
+    
+</div>
+<div *ngIf="this.futureOrderDS.liveEnabled === false">
 <p-toolbar>
   <table><tr><td class='vertical-align: bottom;'>
   <div class="p-toolbar-group-left">
@@ -71,7 +78,7 @@
 </td></tr></table>
 </p-toolbar>
 
-
+<!--
 <span class="p-buttonset">
   <button pButton type="button" value=0 (click)="this.tabChange(0)" label="Labs ({{this.orderCounts.lab}})"  
   [ngClass]="this.orderType == 0 ? 'p-button-raised' : 'p-button-text'">
@@ -79,8 +86,18 @@
   <button pButton type="button" value=1 (click)="this.tabChange(1)" label="Cardiology ({{this.orderCounts.cardiology}})"  
   [ngClass]="this.orderType == 1 ? 'p-button-raised' : 'p-button-text'">
 </button>
+</span>
+-->
 
-
+<span class="p-buttonset">
+  <button pButton *ngIf="this.orderType == 0" type="button" value=0 (click)="this.tabChange(0)" label="Labs ({{this.orderCounts.lab}})"  
+  class="p-button-raised"></button>
+  <button pButton *ngIf="this.orderType == 1" type="button" value=0 (click)="this.tabChange(0)" label="Labs ({{this.orderCounts.lab}})"  
+  class="p-button-text"></button>
+  <button pButton *ngIf="this.orderType == 1" type="button" value=1 (click)="this.tabChange(1)" label="Cardiology ({{this.orderCounts.cardiology}})"  
+  class="p-button-raised"></button>
+  <button pButton *ngIf="this.orderType == 0" type="button" value=1 (click)="this.tabChange(1)" label="Cardiology ({{this.orderCounts.cardiology}})"  
+  class="p-button-text"></button>
 </span>
 
 <p-treeTable  
@@ -182,4 +199,4 @@
 
   </div>
 </p-toolbar>
-
+</div>

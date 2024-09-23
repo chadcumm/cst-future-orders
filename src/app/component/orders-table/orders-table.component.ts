@@ -275,6 +275,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
     console.log(this.selectedOrders)
     console.log(this.mPage.encntrId)
     //need to add in updates to order details
+    
     for (let ord of this.selectedOrders) {
         if (ord.data.hiddenData.needLabCollection == 1) {
           //window.alert("needs collection flipped")
@@ -294,6 +295,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
         OEFRequest.send("~MINE~,"+ord.data.orderId+",~COLLECTIONDATE~")
       }
   }
+  
 
     var d=new Date();
       var twoDigit=function(num: string | number){(String(num).length<2)?num=String("0"+num):num=String(num);
@@ -314,7 +316,7 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
         //console.log("~MINE~,"+ord.data.orderId+","+this.mPage.encntrId+","+ord.data.hiddenData.needLabCollection+","+ord.data.hiddenData.needDateUpdate) 
         // @ts-ignore
         var OEFRequest = window.external.XMLCclRequest();						
-        OEFRequest.open("GET","3bc_cmc_test",false);
+        OEFRequest.open("GET","bc_all_future_ord_lb_set",false);
         OEFRequest.send("~MINE~,"+ord.data.orderId+","+this.mPage.encntrId+","+ord.data.hiddenData.needLabCollection+","+ord.data.hiddenData.needDateUpdate)
        
         var success=PowerOrdersMPageUtils.InvokeActivateAction(hMoew,ord.data.orderId,activateDate);
@@ -322,8 +324,10 @@ export class OrdersTableComponent implements OnInit, AfterViewInit {
       }
     
     if(success){
-        PowerOrdersMPageUtils.SignOrders(hMoew);    
-        this.tableRefresh()
+        PowerOrdersMPageUtils.SignOrders(hMoew);   
+        let vLookback = `${this.lookbackNumber},${this.selectedLookback.value}`
+        let vLookforward = `${this.lookforwardNumber},${this.selectedLookforward.value}` 
+        this.tableRefresh(vLookback,vLookforward,this.orderType)
     }
 
     this.selectedOrders = [];

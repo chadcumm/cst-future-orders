@@ -26,7 +26,7 @@ export class FutureorderService {
       customScript: {
         script: [
           {
-            name: '3bc_all_future_orders:group1',
+            name: 'bc_all_future_orders:group1',
             run: 'pre',
             id: 'futureorders',
             parameters: {
@@ -88,8 +88,23 @@ export class FutureorderService {
     } else {
         return false
     }
+  }
+
+       //Returns Support Tool Indicated
+   public get liveEnabled(): boolean  {
+    //console.log(this.futureOrderService.get('futureorders').supportToolInd)
+    if (this.futureOrderService.get('futureorders').liveInd == 'false') {
+        return true
+    } else {
+        return false
+    }
+  }
+
+    public get supportMessage(): string {
+      return this.futureOrderService.get('futureorders').supportMessage
+    }
     
     //return this.futureOrderService.get('futureorders').supportToolInd
     //return(this.orderJSON[0].orderList)
-  }
+
 }
